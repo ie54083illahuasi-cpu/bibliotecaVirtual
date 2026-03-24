@@ -42,11 +42,11 @@ const Login = () => {
 
       <div style={{ maxWidth: '1000px', width: '90%', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', animation: 'fadeInDown 0.8s' }}>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>E-Biblioteca</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>Selecciona tu rol para ingresar al sistema</p>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>E-Biblioteca</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>Selecciona tu rol para ingresar al sistema</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', width: '100%' }}>
           
           {/* Tarjeta de Estudiante */}
           <div className="glass-panel" 

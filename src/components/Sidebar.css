@@ -13,6 +13,7 @@
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -66,3 +67,53 @@
 
 .border-none { border: none; }
 .bg-transparent { background: transparent; width: 100%; text-align: left;}
+
+/* ------------------------------------- */
+/* BARRA SUPERIOR PARA MÓVILES */
+/* ------------------------------------- */
+@media (max-width: 768px) {
+  .sidebar-header {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    flex: 0 0 auto;
+  }
+  
+  /* Oculta el título "BiblioTech" y etiqueta Pro para ahorrar espacio */
+  .sidebar-header h2, .sidebar-header .badge {
+    display: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    overflow-x: auto;
+    margin: 0 1rem;
+    align-items: center;
+  }
+  
+  .nav-item {
+    padding: 0.6rem;
+    margin: 0;
+    justify-content: center;
+  }
+  
+  /* Oculta los textos de "Dashboard", "Libros" etc. Solo íconos */
+  .nav-item span {
+    display: none;
+  }
+  
+  .sidebar-footer {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: none;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  .sidebar-footer .nav-item span {
+    display: none;
+  }
+}

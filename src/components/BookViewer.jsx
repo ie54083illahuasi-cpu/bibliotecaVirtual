@@ -24,10 +24,14 @@ const BookViewer = ({ url, title, onClose }) => {
   const [loadError, setLoadError] = useState(null);
 
   const isGoogleDrive = url && url.includes('drive.google.com');
-  let driveId = '';
+  const isFlipHtml5 = url && url.includes('fliphtml5.com');
+  
+  let embedUrl = null;
   if (isGoogleDrive) {
       const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-      if (match && match[1]) driveId = match[1];
+      if (match && match[1]) embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+  } else if (isFlipHtml5) {
+      embedUrl = url;
   }
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -48,19 +52,17 @@ const BookViewer = ({ url, title, onClose }) => {
         <button onClick={onClose} className="btn-close"><X size={24} /></button>
       </div>
       
-      <div className="book-container" style={{ flexDirection: 'column', padding: isGoogleDrive ? 0 : '2rem', overflow: 'hidden' }}>
+      <div className="book-container" style={embedUrl ? { padding: 0, display: 'block', height: '100%', width: '100%', flex: 1 } : { flexDirection: 'column', padding: '2rem', overflow: 'hidden' }}>
         
-        {isGoogleDrive && driveId ? (
-           <div style={{ width: '100%', height: '100%', flex: 1, background: 'transparent', display: 'flex', flexDirection: 'column' }}>
-              <iframe 
-                 src={`https://drive.google.com/file/d/${driveId}/preview`} 
-                 width="100%" 
-                 height="100%" 
-                 allow="autoplay" 
-                 title="Visor de Google Drive"
-                 style={{ border: 'none', flex: 1, display: 'block' }}
-              ></iframe>
-           </div>
+        {embedUrl ? (
+           <iframe 
+              src={embedUrl} 
+              width="100%" 
+              height="100%" 
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" 
+              title="Visor de Libro"
+              style={{ border: 'none', display: 'block' }}
+           ></iframe>
         ) : (
           <>
             {loading && !loadError && (

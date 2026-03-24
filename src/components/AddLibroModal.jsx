@@ -27,8 +27,8 @@ const AddLibroModal = ({ onClose, editLibro }) => {
   };
 
   return (
-    <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)' }}>
-      <div className="glass-panel" style={{ width: '90%', maxWidth: '600px', padding: '2rem', animation: 'fadeIn 0.3s', maxHeight: '90vh', overflowY: 'auto' }}>
+    <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)', padding: '1rem' }}>
+      <div className="glass-panel" style={{ width: '100%', maxWidth: '600px', padding: '2rem', animation: 'fadeIn 0.3s', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <h2>{editLibro ? 'Editar Libro' : 'Añadir Nuevo Libro'}</h2>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}><X size={24}/></button>
@@ -40,8 +40,8 @@ const AddLibroModal = ({ onClose, editLibro }) => {
            </div>
         ) : (
            <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div className="form-group" style={{ gridColumn: '1 / span 2' }}>
+              <div className="form-grid">
+                  <div className="form-group full-width">
                      <label>Código de Barras / QR</label>
                      <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <input type="text" className="form-control" name="codigoBarras" value={formData.codigoBarras} onChange={handleChange} placeholder="Escanea o escribe el código" />
@@ -50,7 +50,7 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                         </button>
                      </div>
                   </div>
-                  <div className="form-group" style={{ gridColumn: '1 / span 2' }}>
+                  <div className="form-group full-width">
                      <label>Título del Libro</label>
                      <input required type="text" className="form-control" name="titulo" value={formData.titulo} onChange={handleChange} />
                   </div>
@@ -76,7 +76,7 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                      </div>
                   )}
                   {formData.tipo === 'virtual' && (
-                     <div className="form-group" style={{ gridColumn: '1 / span 2' }}>
+                     <div className="form-group full-width">
                         <label>URL o Archivo PDF</label>
                         <input required type="text" className="form-control" name="urlVirtual" value={formData.urlVirtual} onChange={handleChange} placeholder="https://..." />
                         <small style={{ color: 'var(--text-secondary)' }}>Proporciona el enlace al libro para el visor virtual.</small>

@@ -40,38 +40,36 @@ const AddPrestamoModal = ({ onClose }) => {
   };
 
   return (
-    <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)' }}>
-      <div className="glass-panel" style={{ width: '90%', maxWidth: '500px', padding: '2rem', animation: 'fadeIn 0.3s' }}>
+    <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)', padding: '1rem' }}>
+      <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', padding: '2rem', animation: 'fadeIn 0.3s', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <h2>Nuevo Préstamo</h2>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}><X size={24}/></button>
         </div>
 
         <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
-                <div className="form-group">
+            <div className="form-grid">
+                <div className="form-group full-width">
                     <label>Estudiante</label>
                     <select className="form-control" name="estudianteId" value={formData.estudianteId} onChange={handleChange} required>
                        <option value="">-- Seleccionar Estudiante --</option>
                        {estudiantes?.map(est => <option key={est.id} value={est.id}>{est.dni} - {est.nombre} {est.apellidos}</option>)}
                     </select>
                 </div>
-                <div className="form-group">
+                <div className="form-group full-width">
                     <label>Libro (Disponibles)</label>
                     <select className="form-control" name="libroId" value={formData.libroId} onChange={handleChange} required>
                        <option value="">-- Seleccionar Libro --</option>
                        {libros?.map(libro => <option key={libro.id} value={libro.id}>{libro.titulo} ({libro.cantidad} disp.)</option>)}
                     </select>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                   <div className="form-group">
-                      <label>Fecha de Préstamo</label>
-                      <input required type="date" className="form-control" name="fechaPrestamo" value={formData.fechaPrestamo} onChange={handleChange} />
-                   </div>
-                   <div className="form-group">
-                      <label>Devolución Esperada</label>
-                      <input required type="date" className="form-control" name="fechaDevolucionEsperada" value={formData.fechaDevolucionEsperada} onChange={handleChange} />
-                   </div>
+                <div className="form-group">
+                   <label>Fecha de Préstamo</label>
+                   <input required type="date" className="form-control" name="fechaPrestamo" value={formData.fechaPrestamo} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                   <label>Devolución Esperada</label>
+                   <input required type="date" className="form-control" name="fechaDevolucionEsperada" value={formData.fechaDevolucionEsperada} onChange={handleChange} />
                 </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
