@@ -45,8 +45,12 @@ const AreasCurriculares = () => {
           ) : (
             librosArea.map(libro => (
               <div key={libro.id} className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div style={{ height: '140px', background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(16, 185, 129, 0.1))', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                     {libro.tipo === 'virtual' ? <Smartphone size={40} color="var(--primary)" /> : <BookOpen size={40} color="var(--secondary)" />}
+                  <div style={{ height: '200px', background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(16, 185, 129, 0.1))', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     {libro.urlPortada ? (
+                        <img src={libro.urlPortada} alt={libro.titulo} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '0.5rem' }} />
+                     ) : (
+                        libro.tipo === 'virtual' ? <Smartphone size={40} color="var(--primary)" /> : <BookOpen size={40} color="var(--secondary)" />
+                     )}
                   </div>
 
                   <div style={{ flex: 1 }}>

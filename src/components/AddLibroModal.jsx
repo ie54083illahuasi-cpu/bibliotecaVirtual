@@ -6,7 +6,7 @@ import Scanner from './Scanner';
 
 const AddLibroModal = ({ onClose, editLibro }) => {
   const [formData, setFormData] = useState(editLibro || {
-    titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: ''
+    titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: '', urlPortada: ''
   });
   const [showScanner, setShowScanner] = useState(false);
   
@@ -16,15 +16,59 @@ const AddLibroModal = ({ onClose, editLibro }) => {
 
   const handleScan = (decodedText) => {
     // Si escaneamos algo, lo ponemos como código de barras y hacemos un auto-fetch ficticio o permitimos llenado rápido.
-    setFormData({...formData, codigoBarras: decodedText});
+    setFormData({ ...formData, codigoBarras: decodedText });
+    setShowScanner(false);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 400;
+            let scaleSize = 1;
+            if (img.width > MAX_WIDTH) {
+                scaleSize = MAX_WIDTH / img.width;
+            }
+            canvas.width = img.width * scaleSize;
+            canvas.height = img.height * scaleSize;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            const base64String = canvas.toDataURL('image/jpeg', 0.7);
+            setFormData({ ...formData, urlPortada: base64String });
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(editLibro) {
-       await updateLibro(editLibro.id, {...formData, cantidad: parseInt(formData.cantidad, 10)});
+    let finalData = { ...formData };
+    
+    // Auto-generación de portada para virtuales
+    if (finalData.tipo === 'virtual' && finalData.urlVirtual && !finalData.urlPortada) {
+        if (finalData.urlVirtual.includes('fliphtml5.com')) {
+           const cleanUrl = finalData.urlVirtual.trim().replace(/\/$/, ""); 
+           finalData.urlPortada = `${cleanUrl}/files/shot.jpg`;
+        } else {
+           const driveMatch = finalData.urlVirtual.match(/\/d\/(.*?)\//);
+           if (driveMatch && driveMatch[1]) {
+             finalData.urlPortada = `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w500`;
+           }
+        }
+    }
+
+    if (editLibro) {
+      await updateLibro(editLibro.id, { ...finalData, cantidad: parseInt(finalData.cantidad, 10) });
     } else {
-       await addLibro({...formData, cantidad: parseInt(formData.cantidad, 10)});
+       await addLibro({ ...finalData, cantidad: parseInt(finalData.cantidad, 10) });
     }
     onClose();
   };
@@ -85,11 +129,29 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                         <input required type="number" min="1" className="form-control" name="cantidad" value={formData.cantidad} onChange={handleChange} />
                      </div>
                   )}
-                  {formData.tipo === 'virtual' && (
+                  {formData.tipo === 'virtual' ? (
+                     <>
+                        <div className="form-group full-width">
+                           <label>URL de Imagen de Portada Alternativa (Opcional)</label>
+                           <input type="url" className="form-control" name="urlPortada" value={formData.urlPortada || ''} onChange={handleChange} placeholder="Deja vacío para auto-detectar Portada (Solo Drive o FlipHTML5)" />
+                           <small style={{ color: 'var(--text-secondary)' }}>Por defecto, el sistema extraerá automáticamente la 1° hoja de FlipHTML5 o Drive.</small>
+                        </div>
+                        <div className="form-group full-width">
+                           <label>Enlace del Libro Virtual (Drive, FlipHTML5, etc.)</label>
+                           <input type="url" className="form-control" name="urlVirtual" value={formData.urlVirtual} onChange={handleChange} placeholder="https://..." required />
+                           <small style={{ color: 'var(--text-secondary)' }}>Proporciona el enlace para cargar el documento virtual.</small>
+                        </div>
+                     </>
+                  ) : (
                      <div className="form-group full-width">
-                        <label>URL o Archivo PDF</label>
-                        <input required type="text" className="form-control" name="urlVirtual" value={formData.urlVirtual} onChange={handleChange} placeholder="https://..." />
-                        <small style={{ color: 'var(--text-secondary)' }}>Proporciona el enlace al libro para el visor virtual.</small>
+                        <label>Subir Imagen de Portada</label>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                           <input type="file" accept="image/*" className="form-control" onChange={handleImageUpload} style={{ flex: 1 }} />
+                           {formData.urlPortada && (
+                              <img src={formData.urlPortada} alt="Preview" style={{ height: '50px', borderRadius: '4px', border: '1px solid var(--border)' }} />
+                           )}
+                        </div>
+                        <small style={{ color: 'var(--text-secondary)' }}>La imagen se optimizará automáticamente para ocupar poco espacio.</small>
                      </div>
                   )}
               </div>

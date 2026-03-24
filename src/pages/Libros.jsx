@@ -67,6 +67,7 @@ const Libros = () => {
           <thead style={{ background: 'rgba(0,0,0,0.03)' }}>
             <tr>
               <th>ID</th>
+              <th>Portada</th>
               <th>Título y Autor</th>
               <th>Edición</th>
               <th>Tipo</th>
@@ -77,7 +78,7 @@ const Libros = () => {
           <tbody>
             {libros?.length === 0 && (
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
+                <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
                   No se encontraron libros. Añade tu primer libro a la biblioteca.
                 </td>
               </tr>
@@ -85,6 +86,17 @@ const Libros = () => {
             {libros?.map(libro => (
               <tr key={libro.id}>
                 <td>{libro.id}</td>
+                <td style={{ width: '60px' }}>
+                   {libro.urlPortada ? (
+                      <div style={{ width: '40px', height: '56px', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                         <img src={libro.urlPortada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                   ) : (
+                      <div style={{ width: '40px', height: '56px', borderRadius: '4px', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                         {libro.tipo === 'virtual' ? <Smartphone size={16} color="var(--primary)" /> : <BookOpen size={16} color="var(--secondary)" />}
+                      </div>
+                   )}
+                </td>
                 <td>
                   <div style={{ fontWeight: '500' }}>{libro.titulo}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{libro.autor}</div>

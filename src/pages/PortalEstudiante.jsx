@@ -87,8 +87,12 @@ const PortalEstudiante = () => {
                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                   
-                  <div style={{ height: '160px', background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.2))', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-                     <Smartphone size={48} color="var(--primary)" style={{ opacity: 0.8 }} />
+                  <div style={{ height: '200px', background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.2))', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     {libro.urlPortada ? (
+                        <img src={libro.urlPortada} alt={libro.titulo} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '0.5rem' }} />
+                     ) : (
+                        <Smartphone size={48} color="var(--primary)" style={{ opacity: 0.8 }} />
+                     )}
                   </div>
 
                   <div style={{ flex: 1 }}>
