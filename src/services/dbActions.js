@@ -1,11 +1,14 @@
 import { database } from '../config/firebase';
 import { ref, set, get, update, remove, push, child } from 'firebase/database';
 
+const sanitizeKey = (key) => key.replace(/[.#$\[\]]/g, '');
+
 // Estudiantes
 export const addEstudiante = async (estudianteData) => {
-  const newEstudianteRef = push(ref(database, 'estudiantes'));
-  await set(newEstudianteRef, { ...estudianteData, id: newEstudianteRef.key });
-  return newEstudianteRef.key;
+  const rawKey = estudianteData.dni?.trim();
+  const estId = rawKey ? sanitizeKey(rawKey) : push(ref(database, 'estudiantes')).key;
+  await set(ref(database, `estudiantes/${estId}`), { ...estudianteData, id: estId });
+  return estId;
 };
 
 export const updateEstudiante = async (id, estudianteData) => {
@@ -26,9 +29,10 @@ export const getEstudiante = async (id) => {
 
 // Libros
 export const addLibro = async (libroData) => {
-  const newLibroRef = push(ref(database, 'libros'));
-  await set(newLibroRef, { ...libroData, id: newLibroRef.key });
-  return newLibroRef.key;
+  const rawKey = libroData.codigoBarras?.trim();
+  const bookId = rawKey ? sanitizeKey(rawKey) : push(ref(database, 'libros')).key;
+  await set(ref(database, `libros/${bookId}`), { ...libroData, id: bookId });
+  return bookId;
 };
 
 export const updateLibro = async (id, libroData) => {
