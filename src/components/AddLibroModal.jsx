@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { addLibro, updateLibro } from '../services/dbActions';
+import { useFirebaseData } from '../hooks/useFirebaseData';
 import { X, QrCode } from 'lucide-react';
 import Scanner from './Scanner';
 
 const AddLibroModal = ({ onClose, editLibro }) => {
   const [formData, setFormData] = useState(editLibro || {
-    titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: ''
+    titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: ''
   });
   const [showScanner, setShowScanner] = useState(false);
+  
+  const categorias = useFirebaseData('categorias') || [];
 
   const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
 
@@ -61,6 +64,13 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                   <div className="form-group">
                      <label>Edición / Editorial</label>
                      <input type="text" className="form-control" name="edicion" value={formData.edicion} onChange={handleChange} />
+                  </div>
+                  <div className="form-group full-width">
+                     <label>Área Curricular</label>
+                     <select className="form-control" name="areaCurricular" value={formData.areaCurricular || ''} onChange={handleChange}>
+                        <option value="">-- Seleccionar Área --</option>
+                        {categorias.map(cat => <option key={cat.id} value={cat.nombre}>{cat.nombre}</option>)}
+                     </select>
                   </div>
                   <div className="form-group">
                      <label>Tipo de Libro</label>

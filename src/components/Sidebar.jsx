@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Users, Handshake, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Users, Handshake, Settings, LogOut, Grid } from 'lucide-react';
 import { auth } from '../config/firebase';
 import { signOut } from 'firebase/auth';
 import './Sidebar.css';
@@ -20,6 +20,10 @@ const Sidebar = () => {
         <NavLink to="/admin" end className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
+        </NavLink>
+        <NavLink to="/admin/areas" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+          <Grid size={20} />
+          <span>Áreas Curriculares</span>
         </NavLink>
         <NavLink to="/admin/libros" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
           <BookOpen size={20} />

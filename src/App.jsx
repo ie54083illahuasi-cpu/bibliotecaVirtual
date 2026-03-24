@@ -6,6 +6,7 @@ import Libros from './pages/Libros';
 import Estudiantes from './pages/Estudiantes';
 import Prestamos from './pages/Prestamos';
 import PortalEstudiante from './pages/PortalEstudiante';
+import AreasCurriculares from './pages/AreasCurriculares';
 import Login from './pages/Login';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
@@ -52,6 +53,7 @@ function App() {
               <main className="main-content glass-panel" style={{ padding: '2rem' }}>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
+                  <Route path="/areas" element={<AreasCurriculares />} />
                   <Route path="/libros" element={<Libros />} />
                   <Route path="/estudiantes" element={<Estudiantes />} />
                   <Route path="/prestamos" element={<Prestamos />} />

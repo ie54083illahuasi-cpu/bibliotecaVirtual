@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
-import { Search, BookOpen, Smartphone, Library } from 'lucide-react';
+import { Search, BookOpen, Smartphone, Library, LogOut } from 'lucide-react';
 import BookViewer from '../components/BookViewer';
+import { useNavigate } from 'react-router-dom';
 
 const PortalEstudiante = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewingVirtualBook, setViewingVirtualBook] = useState(null);
+  const [filtroArea, setFiltroArea] = useState('');
 
   // Solo traemos los libros virtuales para el catálogo público
   const todosLibros = useFirebaseData('libros') || [];
-  const librosVirtuales = todosLibros.filter(libro => 
-    libro.tipo === 'virtual' && 
-    ((libro.titulo || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-     (libro.autor || '').toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  
+  // Extraer áreas únicas de libros virtuales
+  const virtualesBase = todosLibros.filter(l => l.tipo === 'virtual');
+  const areasUnicas = [...new Set(virtualesBase.map(l => l.areaCurricular).filter(Boolean))];
+
+  const librosVirtuales = virtualesBase.filter(libro => {
+    const matchBusqueda = (libro.titulo || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          (libro.autor || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchArea = filtroArea ? libro.areaCurricular === filtroArea : true;
+    return matchBusqueda && matchArea;
+  });
 
   return (
-    <div style={{ minHeight: '100vh', padding: '2rem', background: 'var(--bg-color)', color: 'var(--text-primary)', animation: 'fadeIn 0.5s', position: 'relative' }}>
+    <div style={{ width: '100%', minHeight: '100vh', padding: '2rem', background: 'var(--bg-color)', color: 'var(--text-primary)', animation: 'fadeIn 0.5s', position: 'relative' }}>
       {/* Fondo decorativo */}
       <div className="bg-shape shape1"></div>
       <div className="bg-shape shape2"></div>
@@ -24,6 +33,13 @@ const PortalEstudiante = () => {
       {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />}
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+        
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+           <button onClick={() => navigate('/')} className="btn" style={{ background: 'rgba(255,255,255,0.1)', color: 'var(--text-primary)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <LogOut size={18} /> Salir al Inicio
+           </button>
+        </div>
+
         <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <div style={{ display: 'inline-flex', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '50%', marginBottom: '1rem', border: '1px solid var(--border)' }}>
              <Library size={48} color="var(--primary)" />
@@ -34,8 +50,8 @@ const PortalEstudiante = () => {
           </p>
         </header>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '3rem', display: 'flex', gap: '1rem', alignItems: 'center', maxWidth: '800px', margin: '0 auto 3rem auto', borderRadius: '50px' }}>
-           <div style={{ flex: 1, position: 'relative' }}>
+        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '3rem', display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '800px', margin: '0 auto', borderRadius: '30px' }}>
+           <div style={{ position: 'relative' }}>
               <Search size={24} style={{ position: 'absolute', left: '20px', top: '12px', color: 'var(--text-secondary)' }} />
               <input 
                 type="text" 
@@ -46,9 +62,18 @@ const PortalEstudiante = () => {
                 style={{ paddingLeft: '3.5rem', border: 'none', background: 'transparent', fontSize: '1.1rem', width: '100%', outline: 'none', color: 'var(--text-primary)' }}
               />
            </div>
+           
+           {areasUnicas.length > 0 && (
+              <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem', flexWrap: 'wrap' }}>
+                 <select className="form-control" style={{ flex: 1, minWidth: '200px', background: 'rgba(0,0,0,0.2)', border: 'none' }} value={filtroArea} onChange={e => setFiltroArea(e.target.value)}>
+                    <option value="">Todas las Áreas</option>
+                    {areasUnicas.map(area => <option key={area} value={area}>{area}</option>)}
+                 </select>
+              </div>
+           )}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem', justifyContent: 'center' }}>
           {librosVirtuales?.length === 0 ? (
              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
                 <BookOpen size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
@@ -69,6 +94,11 @@ const PortalEstudiante = () => {
                   <div style={{ flex: 1 }}>
                      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', lineHeight: 1.3 }}>{libro.titulo}</h3>
                      <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{libro.autor}</p>
+                     {libro.areaCurricular && (
+                        <div style={{ fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'inline-block', background: 'rgba(79, 70, 229, 0.1)', padding: '0.2rem 0.6rem', borderRadius: '4px' }}>
+                           {libro.areaCurricular}
+                        </div>
+                     )}
                   </div>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>

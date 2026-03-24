@@ -61,3 +61,18 @@ export const updatePrestamo = async (id, prestamoData) => {
 export const deletePrestamo = async (id) => {
   await remove(ref(database, `prestamos/${id}`));
 };
+
+// Categorias (Áreas y Cursos)
+export const addCategoria = async (categoriaData) => {
+  const newCategoriaRef = push(ref(database, 'categorias'));
+  await set(newCategoriaRef, { ...categoriaData, id: newCategoriaRef.key });
+  return newCategoriaRef.key;
+};
+
+export const updateCategoria = async (id, categoriaData) => {
+  await update(ref(database, `categorias/${id}`), categoriaData);
+};
+
+export const deleteCategoria = async (id) => {
+  await remove(ref(database, `categorias/${id}`));
+};

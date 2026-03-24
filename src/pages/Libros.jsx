@@ -3,6 +3,7 @@ import { useFirebaseData } from '../hooks/useFirebaseData';
 import { deleteLibro } from '../services/dbActions';
 import { Plus, Search, BookOpen, Smartphone, Trash2 } from 'lucide-react';
 import AddLibroModal from '../components/AddLibroModal';
+import ManageCategoriasModal from '../components/ManageCategoriasModal';
 import BookViewer from '../components/BookViewer';
 
 const Libros = () => {
@@ -10,11 +11,13 @@ const Libros = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingLibro, setEditingLibro] = useState(null);
   const [viewingVirtualBook, setViewingVirtualBook] = useState(null);
+  const [showCategorias, setShowCategorias] = useState(false);
   
   const todosLibros = useFirebaseData('libros') || [];
   const libros = todosLibros.filter(libro => 
     (libro.titulo || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-    (libro.autor || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (libro.autor || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (libro.areaCurricular || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleDelete = async (id) => {
@@ -28,12 +31,18 @@ const Libros = () => {
       {showModal && <AddLibroModal onClose={() => setShowModal(false)} />}
       {editingLibro && <AddLibroModal editLibro={editingLibro} onClose={() => setEditingLibro(null)} />}
       {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />}
+      {showCategorias && <ManageCategoriasModal onClose={() => setShowCategorias(false)} />}
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Gestión de Libros</h1>
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-          <Plus size={18} /> Añadir Libro
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+           <button className="btn btn-secondary" onClick={() => setShowCategorias(true)}>
+             Gestionar Áreas Curriculares
+           </button>
+           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+             <Plus size={18} /> Añadir Libro
+           </button>
+        </div>
       </div>
 
       <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -79,6 +88,11 @@ const Libros = () => {
                 <td>
                   <div style={{ fontWeight: '500' }}>{libro.titulo}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{libro.autor}</div>
+                  {libro.areaCurricular && (
+                     <div style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.2rem', display: 'inline-block', background: 'rgba(79, 70, 229, 0.1)', padding: '0.1rem 0.5rem', borderRadius: '4px' }}>
+                        {libro.areaCurricular}
+                     </div>
+                  )}
                 </td>
                 <td>{libro.edicion}</td>
                 <td>
