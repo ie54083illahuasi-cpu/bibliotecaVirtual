@@ -44,7 +44,7 @@ const Login = () => {
 
       <div style={{ maxWidth: '1000px', width: '90%', margin: 'auto', padding: '3rem 0', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', animation: 'fadeInDown 0.8s' }}>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>E-Biblioteca</h1>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>Biblioteca Virtual I.E 54083</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>Selecciona tu rol para ingresar al sistema</p>
         </div>
 

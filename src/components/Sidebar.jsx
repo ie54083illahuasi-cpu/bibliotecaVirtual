@@ -12,7 +12,7 @@ const Sidebar = () => {
         <div className="logo-icon">
            <BookOpen size={32} color="var(--primary)" />
         </div>
-        <h2>BiblioTech</h2>
+        <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Biblioteca I.E 54083</h2>
         <span className="badge" style={{ background: 'var(--primary)', color: 'white', marginLeft: 'auto' }}>Pro</span>
       </div>
 
