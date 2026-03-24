@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Users, Lock, ChevronRight, ArrowRight } from 'lucide-react';
+import { Shield, Users, Lock, ChevronRight, ArrowRight, User } from 'lucide-react';
+import { auth } from '../config/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const navigate = useNavigate();
   const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleAdminLogin = (e) => {
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
-    if (password === 'admin123') {
-      localStorage.setItem('isAdmin', 'true');
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       navigate('/admin');
-    } else {
+    } catch (err) {
       setError(true);
-      setTimeout(() => setError(false), 2000);
+      setTimeout(() => setError(false), 3000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,10 +90,23 @@ const Login = () => {
             ) : (
               <form onSubmit={handleAdminLogin} style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', animation: 'fadeIn 0.4s' }}>
                  <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                    Por favor, ingresa tu contraseña maestra.<br/>
-                    <small style={{opacity: 0.5}}>(Hint provisional: admin123)</small>
+                    Por favor, ingresa tus credenciales de administrador.
                  </p>
                  
+                 <div style={{ position: 'relative', marginBottom: '1rem' }}>
+                    <User size={20} style={{ position: 'absolute', left: '15px', top: '15px', color: 'var(--text-secondary)' }} />
+                    <input 
+                      type="email" 
+                      className="form-control" 
+                      placeholder="Correo Electrónico"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      style={{ paddingLeft: '3rem', padding: '1rem 1rem 1rem 3rem', borderRadius: '8px', border: '1px solid var(--border)' }}
+                      autoFocus
+                      required
+                    />
+                 </div>
+
                  <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
                     <Lock size={20} style={{ position: 'absolute', left: '15px', top: '15px', color: 'var(--text-secondary)' }} />
                     <input 
@@ -96,17 +116,17 @@ const Login = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       style={{ paddingLeft: '3rem', padding: '1rem 1rem 1rem 3rem', borderRadius: '8px', border: error ? '1px solid var(--danger)' : '1px solid var(--border)' }}
-                      autoFocus
+                      required
                     />
-                    {error && <span style={{ color: 'var(--danger)', fontSize: '0.85rem', position: 'absolute', left: 0, bottom: '-20px' }}>Contraseña incorrecta</span>}
+                    {error && <span style={{ color: 'var(--danger)', fontSize: '0.85rem', position: 'absolute', left: 0, bottom: '-20px' }}>Credenciales incorrectas</span>}
                  </div>
 
                  <div style={{ display: 'flex', gap: '1rem' }}>
                     <button type="button" className="btn" onClick={() => setShowAdminLogin(false)} style={{ background: 'transparent', color: 'var(--text-secondary)', flex: 1 }}>
                        Volver
                     </button>
-                    <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
-                       Ingresar
+                    <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={loading}>
+                       {loading ? 'Iniciando...' : 'Ingresar'}
                     </button>
                  </div>
               </form>

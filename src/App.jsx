@@ -7,10 +7,20 @@ import Estudiantes from './pages/Estudiantes';
 import Prestamos from './pages/Prestamos';
 import PortalEstudiante from './pages/PortalEstudiante';
 import Login from './pages/Login';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
 const ProtectedRoute = ({ children }) => {
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
-  if (!isAdmin) {
+  const { user, authLoading } = useFirebaseAuth();
+
+  if (authLoading) {
+    return (
+      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)' }}>
+         <h3 style={{color: 'var(--text-primary)'}}>Comprobando sesión...</h3>
+      </div>
+    );
+  }
+
+  if (!user) {
     // Si intentas acceder a admin y no estás logueado, ve al inicio
     return <Navigate to="/" replace />;
   }

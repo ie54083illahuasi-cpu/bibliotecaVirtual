@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, Users, Handshake, Settings, LogOut } from 'lucide-react';
+import { auth } from '../config/firebase';
+import { signOut } from 'firebase/auth';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -47,7 +49,7 @@ const Sidebar = () => {
          </button>
          <button 
             className="nav-item border-none bg-transparent" 
-            onClick={() => { localStorage.removeItem('isAdmin'); window.location.href = '/'; }}
+            onClick={async () => { await signOut(auth); window.location.href = '/'; }}
             style={{ color: 'var(--danger)', marginTop: '0.5rem' }}
          >
             <LogOut size={20} />
