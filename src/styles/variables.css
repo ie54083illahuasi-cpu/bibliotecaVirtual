@@ -1,0 +1,42 @@
+:root {
+  /* Colors */
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --secondary: #10B981;
+  --background: #F3F4F6;
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-hover: rgba(255, 255, 255, 0.9);
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --border: rgba(255, 255, 255, 0.4);
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --glass-blur: blur(12px);
+  --glass-border-radius: 16px;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+}
+
+body.dark-mode {
+  --primary: #818CF8;
+  --primary-hover: #6366F1;
+  --background: #111827;
+  --surface: rgba(31, 41, 55, 0.7);
+  --surface-hover: rgba(31, 41, 55, 0.9);
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
