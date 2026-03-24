@@ -32,15 +32,17 @@ const Login = () => {
 
   return (
     <div style={{ 
-      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: 'var(--bg-color)', overflow: 'hidden', zIndex: 1000
+      minHeight: '100vh', width: '100%',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      background: 'var(--bg-color)', position: 'relative'
     }}>
-      {/* Elementos Decorativos de Fondo */}
-      <div className="bg-shape shape1" style={{ width: '600px', height: '600px', position: 'absolute', top: '-20%', left: '-10%' }}></div>
-      <div className="bg-shape shape2" style={{ width: '500px', height: '500px', position: 'absolute', bottom: '-20%', right: '-10%' }}></div>
+      {/* Fondo fijo decorativo para no crear barras de scroll horizontales */}
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+         <div className="bg-shape shape1" style={{ width: '600px', height: '600px', position: 'absolute', top: '-20%', left: '-20%' }}></div>
+         <div className="bg-shape shape2" style={{ width: '500px', height: '500px', position: 'absolute', bottom: '-20%', right: '-20%' }}></div>
+      </div>
 
-      <div style={{ maxWidth: '1000px', width: '90%', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ maxWidth: '1000px', width: '90%', margin: 'auto', padding: '3rem 0', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', animation: 'fadeInDown 0.8s' }}>
           <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>E-Biblioteca</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>Selecciona tu rol para ingresar al sistema</p>
