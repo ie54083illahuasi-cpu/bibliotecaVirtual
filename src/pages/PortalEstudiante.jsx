@@ -50,7 +50,7 @@ const PortalEstudiante = () => {
           </p>
         </header>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '3rem', display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '800px', margin: '0 auto', borderRadius: '30px' }}>
+        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '800px', margin: '0 auto 3rem auto', borderRadius: '30px' }}>
            <div style={{ position: 'relative' }}>
               <Search size={24} style={{ position: 'absolute', left: '20px', top: '12px', color: 'var(--text-secondary)' }} />
               <input 
