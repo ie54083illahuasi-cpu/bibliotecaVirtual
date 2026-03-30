@@ -41,8 +41,8 @@ const PortalEstudiante = () => {
         </div>
 
         <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <div style={{ display: 'inline-flex', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '50%', marginBottom: '1rem', border: '1px solid var(--border)' }}>
-             <Library size={48} color="var(--primary)" />
+          <div style={{ display: 'inline-flex', justifyContent: 'center', marginBottom: '1rem' }}>
+             <img src="/escudo.png" alt="Escudo I.E 54083" style={{ width: '100px', height: '100px', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.2))' }} />
           </div>
           <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Biblioteca Virtual I.E 54083</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
