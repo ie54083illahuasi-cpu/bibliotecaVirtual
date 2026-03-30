@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
 import { deleteEstudiante, addEstudiante } from '../services/dbActions';
-import { Plus, Search, FileSpreadsheet, Trash2 } from 'lucide-react';
+import { Plus, Search, FileSpreadsheet, Trash2, Users } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import AddEstudianteModal from '../components/AddEstudianteModal';
 
@@ -69,15 +69,15 @@ const Estudiantes = () => {
   };
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s' }}>
+    <div className="fade-in">
       {showModal && <AddEstudianteModal onClose={() => setShowModal(false)} />}
       {editingEstudiante && <AddEstudianteModal editEstudiante={editingEstudiante} onClose={() => setEditingEstudiante(null)} />}
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Gestión de Estudiantes</h1>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn btn-secondary glass-panel" style={{ background: 'transparent', color: 'var(--text-primary)', border: '1px dashed var(--border)' }} onClick={handleDownloadTemplate}>
-             Descargar Plantilla
+          <button className="btn btn-secondary" onClick={handleDownloadTemplate} title="Descargar Excel de ejemplo">
+             Plantilla
           </button>
           <input 
             type="file" 
@@ -86,18 +86,18 @@ const Estudiantes = () => {
             ref={fileInputRef} 
             onChange={handleFileUpload} 
           />
-          <button className="btn btn-secondary glass-panel" style={{ background: 'var(--surface)', color: 'var(--text-primary)', border: '1px solid var(--border)' }} onClick={() => fileInputRef.current?.click()}>
-            <FileSpreadsheet size={18} color="var(--secondary)"/> Importar Excel
+          <button className="btn btn-secondary" onClick={() => fileInputRef.current?.click()}>
+            <FileSpreadsheet size={18} color="var(--primary)"/> Importar
           </button>
           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-            <Plus size={18} /> Añadir Estudiante
+            <Plus size={18} /> Nuevo Estudiante
           </button>
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div className="glass-panel" style={{ padding: '1rem 1.5rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
          <div style={{ flex: 1, position: 'relative' }}>
-            <Search size={20} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-secondary)' }} />
+            <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
             <input 
               type="text" 
               className="form-control" 
@@ -111,41 +111,49 @@ const Estudiantes = () => {
 
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
         <table className="data-table">
-          <thead style={{ background: 'rgba(0,0,0,0.03)' }}>
+          <thead>
             <tr>
               <th>DNI</th>
-              <th>Nombre Completo</th>
+              <th>Estudiante</th>
               <th>Grado y Sec.</th>
-              <th>Teléfono</th>
-              <th>Email</th>
-              <th>Acciones</th>
+              <th className="hide-mobile">Contacto</th>
+              <th style={{ textAlign: 'right' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {estudiantes?.length === 0 && (
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                  Aún no hay estudiantes registrados.
+                <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+                  <Users size={40} style={{ opacity: 0.1, marginBottom: '1rem' }} />
+                  <p>No hay estudiantes registrados en el sistema.</p>
                 </td>
               </tr>
             )}
             {estudiantes?.map(est => (
               <tr key={est.id}>
-                <td style={{ fontWeight: '500' }}>{est.dni}</td>
-                <td>{est.apellidos}, {est.nombre}</td>
+                <td style={{ fontWeight: '600', color: 'var(--text-primary)', fontFamily: 'monospace' }}>{est.dni}</td>
+                <td>
+                   <div style={{ fontWeight: '500' }}>{est.apellidos}, {est.nombre}</div>
+                </td>
                 <td>
                   {est.grado || est.seccion ? (
-                    <span className="badge" style={{ background: 'rgba(79, 70, 229, 0.1)', color: 'var(--primary)' }}>
+                    <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.08)', color: 'var(--primary)', border: '1px solid rgba(2, 136, 209, 0.1)' }}>
                        {est.grado}° {est.seccion}
                     </span>
                   ) : '-'}
                 </td>
-                <td>{est.telefono}</td>
-                <td>{est.email}</td>
+                <td className="hide-mobile">
+                   <div style={{ fontSize: '0.85rem' }}>{est.telefono || '-'}</div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{est.email}</div>
+                </td>
                 <td>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingEstudiante(est)}>Editar</button>
-                    <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(est.id)}>Eliminar</button>
+                  <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'flex-end' }}>
+                    <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingEstudiante(est)} title="Editar">
+                       <Plus size={18} style={{ transform: 'rotate(45deg)' }} />
+                    </button>
+                    <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(est.id)} title="Eliminar">
+                       <Trash2 size={18} />
+                    </button>
                   </div>
                 </td>
               </tr>

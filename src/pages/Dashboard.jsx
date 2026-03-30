@@ -1,115 +1,132 @@
-import React, { useEffect, useState } from 'react';
-import { BookOpen, Users, Handshake, TrendingUp } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { BookOpen, Users, Handshake, TrendingUp, Clock, List } from 'lucide-react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const libros = useFirebaseData('libros') || [];
   const estudiantes = useFirebaseData('estudiantes') || [];
   const prestamos = useFirebaseData('prestamos') || [];
 
-  const librosCount = libros.length;
-  const estudiantesCount = estudiantes.length;
-  
-  const prestamosActivos = prestamos.filter(p => p.estado === 'activo');
-  const prestamosActivosCount = prestamosActivos.length;
-
-  const devolucionesPendientes = prestamosActivos.filter(p => {
+  // Memorizar estadísticas para evitar cálculos en cada renderizado
+  const stats = useMemo(() => {
+    const librosCount = libros.length;
+    const estudiantesCount = estudiantes.length;
+    const prestamosActivos = prestamos.filter(p => p.estado === 'activo');
     const today = new Date().toISOString().split('T')[0];
-    return p.fechaDevolucionEsperada < today;
-  }).length;
+    const devolucionesPendientes = prestamosActivos.filter(p => p.fechaDevolucionEsperada < today).length;
 
-  const ultimosLibros = [...libros].reverse().slice(0, 5);
-  
-  const ultimosPrestamos = [...prestamos].reverse().slice(0, 5).map(p => {
-     const estudiante = estudiantes.find(e => e.id === p.estudianteId);
-     const libro = libros.find(l => l.id === p.libroId);
-     return {
-       ...p,
-       estudianteNombre: estudiante ? `${estudiante.nombre} ${estudiante.apellidos}` : 'Eliminado',
-       libroTitulo: libro ? libro.titulo : 'Eliminado'
-     };
-  });
+    return {
+      librosCount,
+      estudiantesCount,
+      prestamosActivosCount: prestamosActivos.length,
+      devolucionesPendientes
+    };
+  }, [libros, estudiantes, prestamos]);
+
+  // Memorizar las listas filtradas
+  const dataListas = useMemo(() => {
+    const ultimosLibros = [...libros].reverse().slice(0, 5);
+    const ultimosPrestamos = [...prestamos].reverse().slice(0, 5).map(p => {
+      const estudiante = estudiantes.find(e => e.id === p.estudianteId);
+      const libro = libros.find(l => l.id === p.libroId);
+      return {
+        ...p,
+        estudianteNombre: estudiante ? `${estudiante.nombre} ${estudiante.apellidos}` : 'Eliminado',
+        libroTitulo: libro ? libro.titulo : 'Eliminado'
+      };
+    });
+
+    return { ultimosLibros, ultimosPrestamos };
+  }, [libros, estudiantes, prestamos]);
 
   return (
-    <div className="dashboard-container" style={{ animation: 'fadeIn 0.5s ease-in-out' }}>
-      <h1>Dashboard Principal</h1>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Resumen del estado actual de la Biblioteca.</p>
+    <div className="dashboard-container">
+      <header className="dashboard-header">
+        <h1>Resumen General</h1>
+        <p>Estado actual de la Biblioteca Institucional 54083.</p>
+      </header>
 
-      <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-        
-        <div className="stat-card glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="stat-icon" style={{ background: 'rgba(79, 70, 229, 0.1)', color: 'var(--primary)', padding: '1rem', borderRadius: '14px' }}>
+      <div className="stats-grid">
+        <div className="stat-card glass-panel">
+          <div className="stat-icon icon-libros">
             <BookOpen size={28} />
           </div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Total Libros</h3>
-            <p style={{ fontSize: '2rem', fontWeight: '700', margin: 0 }}>{librosCount}</p>
+          <div className="stat-info">
+            <h3>Libros en Catálogo</h3>
+            <p>{stats.librosCount}</p>
           </div>
         </div>
 
-        <div className="stat-card glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--secondary)', padding: '1rem', borderRadius: '14px' }}>
+        <div className="stat-card glass-panel">
+          <div className="stat-icon icon-estudiantes">
             <Users size={28} />
           </div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Estudiantes</h3>
-            <p style={{ fontSize: '2rem', fontWeight: '700', margin: 0 }}>{estudiantesCount}</p>
+          <div className="stat-info">
+            <h3>Estudiantes</h3>
+            <p>{stats.estudiantesCount}</p>
           </div>
         </div>
 
-        <div className="stat-card glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)', padding: '1rem', borderRadius: '14px' }}>
+        <div className="stat-card glass-panel">
+          <div className="stat-icon icon-activos">
             <Handshake size={28} />
           </div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Préstamos Activos</h3>
-            <p style={{ fontSize: '2rem', fontWeight: '700', margin: 0 }}>{prestamosActivosCount}</p>
+          <div className="stat-info">
+            <h3>Préstamos Activos</h3>
+            <p>{stats.prestamosActivosCount}</p>
           </div>
         </div>
 
-        <div className="stat-card glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="stat-icon" style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '1rem', borderRadius: '14px' }}>
+        <div className="stat-card glass-panel">
+          <div className="stat-icon icon-atrasados">
             <TrendingUp size={28} />
           </div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Devoluciones Atrasadas</h3>
-            <p style={{ fontSize: '2rem', fontWeight: '700', margin: 0 }}>{devolucionesPendientes}</p>
+          <div className="stat-info">
+            <h3>Atrasos Pendientes</h3>
+            <p>{stats.devolucionesPendientes}</p>
           </div>
         </div>
-
       </div>
 
-      <div className="dashboard-content" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '1.5rem' }}>
-         <div className="glass-panel" style={{ padding: '1.5rem', overflow: 'hidden' }}>
-            <h2>Últimos Libros Añadidos</h2>
-            {ultimosLibros.length === 0 ? (
-               <p style={{ color: 'var(--text-secondary)' }}>Aún no hay datos disponibles.</p>
+      <div className="dashboard-main-content">
+         <div className="glass-panel" style={{ padding: '2rem' }}>
+            <h2 className="panel-title"><List size={22} style={{ color: 'var(--primary)' }} /> Últimos Añadidos</h2>
+            {dataListas.ultimosLibros.length === 0 ? (
+               <p className="item-sub">Aún no hay libros en el sistema.</p>
             ) : (
-               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                 {ultimosLibros.map(libro => (
-                    <li key={libro.id} style={{ paddingBottom: '0.8rem', borderBottom: '1px solid var(--border)' }}>
-                       <div style={{ fontWeight: '600' }}>{libro.titulo}</div>
-                       <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{libro.autor} • {libro.cantidad} copias</div>
+               <ul className="dashboard-list">
+                 {dataListas.ultimosLibros.map(libro => (
+                    <li key={libro.id} className="list-item">
+                       <div className="item-main">
+                          <span className="truncate">{libro.titulo}</span>
+                          {libro.tipo === 'virtual' && <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.1)', color: 'var(--primary)' }}>E-Book</span>}
+                       </div>
+                       <div className="item-sub">{libro.autor} • {libro.cantidad} copias</div>
                     </li>
                  ))}
                </ul>
             )}
          </div>
-         <div className="glass-panel" style={{ padding: '1.5rem', overflow: 'hidden' }}>
-            <h2>Préstamos Recientes</h2>
-            {ultimosPrestamos.length === 0 ? (
-               <p style={{ color: 'var(--text-secondary)' }}>Aún no hay datos disponibles.</p>
+
+         <div className="glass-panel" style={{ padding: '2rem' }}>
+            <h2 className="panel-title"><Clock size={22} style={{ color: 'var(--secondary)' }} /> Actividad Reciente</h2>
+            {dataListas.ultimosPrestamos.length === 0 ? (
+               <p className="item-sub">No hay registros de préstamos recientes.</p>
             ) : (
-               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                 {ultimosPrestamos.map(p => (
-                    <li key={p.id} style={{ paddingBottom: '0.8rem', borderBottom: '1px solid var(--border)' }}>
-                       <div style={{ fontWeight: '600', display: 'flex', justifyContent: 'space-between' }}>
-                         <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '75%' }}>{p.libroTitulo}</span>
-                         <span className="badge" style={{ background: p.estado === 'activo' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)', color: p.estado === 'activo' ? 'var(--warning)' : 'var(--secondary)' }}>
-                            {p.estado === 'activo' ? 'Pendiente' : 'Devuelto'}
-                         </span>
+               <ul className="dashboard-list">
+                 {dataListas.ultimosPrestamos.map(p => (
+                    <li key={p.id} className="list-item">
+                       <div className="item-main">
+                          <span className="truncate">{p.libroTitulo}</span>
+                          <span className="badge" style={{ 
+                            background: p.estado === 'activo' ? 'rgba(251, 192, 45, 0.1)' : 'rgba(16, 185, 129, 0.1)', 
+                            color: p.estado === 'activo' ? 'var(--accent-gold)' : 'var(--secondary)' 
+                          }}>
+                             {p.estado === 'activo' ? 'Pendiente' : 'Devuelto'}
+                          </span>
                        </div>
-                       <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Prestado a: {p.estudianteNombre}</div>
+                       <div className="item-sub">Prestado a: {p.estudianteNombre}</div>
                     </li>
                  ))}
                </ul>

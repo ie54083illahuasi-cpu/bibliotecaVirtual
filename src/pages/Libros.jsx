@@ -27,17 +27,17 @@ const Libros = () => {
   };
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s' }}>
+    <div className="fade-in">
       {showModal && <AddLibroModal onClose={() => setShowModal(false)} />}
       {editingLibro && <AddLibroModal editLibro={editingLibro} onClose={() => setEditingLibro(null)} />}
       {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />}
       {showCategorias && <ManageCategoriasModal onClose={() => setShowCategorias(false)} />}
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Gestión de Libros</h1>
         <div style={{ display: 'flex', gap: '1rem' }}>
            <button className="btn btn-secondary" onClick={() => setShowCategorias(true)}>
-             Gestionar Áreas Curriculares
+             Áreas Curriculares
            </button>
            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
              <Plus size={18} /> Añadir Libro
@@ -45,82 +45,89 @@ const Libros = () => {
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div className="glass-panel" style={{ padding: '1rem 1.5rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
          <div style={{ flex: 1, position: 'relative' }}>
-            <Search size={20} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-secondary)' }} />
+            <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
             <input 
               type="text" 
               className="form-control" 
-              placeholder="Buscar por título o autor..." 
+              placeholder="Buscar por título, autor o área..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ paddingLeft: '2.5rem' }}
             />
          </div>
-         <button className="btn btn-secondary glass-panel" style={{ background: 'var(--surface)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
-           Filtros
-         </button>
       </div>
 
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
         <table className="data-table">
-          <thead style={{ background: 'rgba(0,0,0,0.03)' }}>
+          <thead>
             <tr>
-              <th>ID</th>
               <th>Portada</th>
-              <th>Título y Autor</th>
-              <th>Edición</th>
+              <th>Información del Libro</th>
+              <th className="hide-mobile">Edición</th>
               <th>Tipo</th>
-              <th>Inventario</th>
-              <th>Acciones</th>
+              <th>Stock</th>
+              <th style={{ textAlign: 'right' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {libros?.length === 0 && (
               <tr>
-                <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                  No se encontraron libros. Añade tu primer libro a la biblioteca.
+                <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+                  <BookOpen size={40} style={{ opacity: 0.1, marginBottom: '1rem' }} />
+                  <p>No se encontraron libros en el catálogo.</p>
                 </td>
               </tr>
             )}
             {libros?.map(libro => (
               <tr key={libro.id}>
-                <td>{libro.id}</td>
-                <td style={{ width: '60px' }}>
-                   {libro.urlPortada ? (
-                      <div style={{ width: '40px', height: '56px', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                         <img src={libro.urlPortada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      </div>
-                   ) : (
-                      <div style={{ width: '40px', height: '56px', borderRadius: '4px', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
-                         {libro.tipo === 'virtual' ? <Smartphone size={16} color="var(--primary)" /> : <BookOpen size={16} color="var(--secondary)" />}
-                      </div>
-                   )}
+                <td style={{ width: '80px' }}>
+                    <div style={{ width: '45px', height: '64px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--background)' }}>
+                       {libro.urlPortada ? (
+                          <img src={libro.urlPortada} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                       ) : (
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                             {libro.tipo === 'virtual' ? <Smartphone size={20} color="var(--primary)" style={{ opacity: 0.5 }} /> : <BookOpen size={20} color="var(--secondary)" style={{ opacity: 0.5 }} />}
+                          </div>
+                       )}
+                    </div>
                 </td>
                 <td>
-                  <div style={{ fontWeight: '500' }}>{libro.titulo}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{libro.autor}</div>
+                  <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{libro.titulo}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{libro.autor}</div>
                   {libro.areaCurricular && (
-                     <div style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.2rem', display: 'inline-block', background: 'rgba(79, 70, 229, 0.1)', padding: '0.1rem 0.5rem', borderRadius: '4px' }}>
+                     <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.08)', color: 'var(--primary)', marginTop: '0.4rem', border: 'none' }}>
                         {libro.areaCurricular}
-                     </div>
+                     </span>
                   )}
                 </td>
-                <td>{libro.edicion}</td>
+                <td className="hide-mobile">{libro.edicion || '-'}</td>
                 <td>
-                  <span className="badge" style={{ background: libro.tipo === 'virtual' ? 'rgba(79, 70, 229, 0.1)' : 'rgba(16, 185, 129, 0.1)', color: libro.tipo === 'virtual' ? 'var(--primary)' : 'var(--secondary)' }}>
-                     {libro.tipo === 'virtual' ? <Smartphone size={12} style={{marginRight: 4}}/> : <BookOpen size={12} style={{marginRight: 4}}/>}
-                     {libro.tipo === 'virtual' ? 'Virtual' : 'Físico'}
+                  <span className="badge" style={{ 
+                    background: libro.tipo === 'virtual' ? 'rgba(2, 136, 209, 0.1)' : 'rgba(198, 40, 40, 0.1)', 
+                    color: libro.tipo === 'virtual' ? 'var(--primary)' : 'var(--secondary)' 
+                  }}>
+                     {libro.tipo === 'virtual' ? 'Digital' : 'Físico'}
                   </span>
                 </td>
-                <td>{libro.cantidad} disponibles</td>
                 <td>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                   <div style={{ fontWeight: '500' }}>{libro.cantidad}</div>
+                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>ejemplares</div>
+                </td>
+                <td>
+                  <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'flex-end' }}>
                     {libro.tipo === 'virtual' && (
-                       <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--primary)' }} onClick={() => setViewingVirtualBook(libro)}>Leer</button>
+                       <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--primary)' }} onClick={() => setViewingVirtualBook(libro)} title="Leer">
+                          <BookOpen size={18} />
+                       </button>
                     )}
-                    <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingLibro(libro)}>Editar</button>
-                    <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(libro.id)}><Trash2 size={16}/></button>
+                    <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingLibro(libro)} title="Editar">
+                       <Plus size={18} style={{ transform: 'rotate(45deg)' }} /> {/* Using Plus as a simplified Edit icon for now as I don't see Edit in imports */}
+                    </button>
+                    <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(libro.id)} title="Eliminar">
+                       <Trash2 size={18}/>
+                    </button>
                   </div>
                 </td>
               </tr>

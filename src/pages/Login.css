@@ -1,0 +1,200 @@
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--background);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-shape {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.4;
+  border-radius: 50%;
+}
+
+.shape1 {
+  width: 600px;
+  height: 600px;
+  top: -20%;
+  left: -20%;
+  background: radial-gradient(circle, var(--primary), transparent);
+}
+
+.shape2 {
+  width: 500px;
+  height: 500px;
+  bottom: -20%;
+  right: -20%;
+  background: radial-gradient(circle, var(--secondary), transparent);
+}
+
+.login-content {
+  max-width: 900px;
+  width: 90%;
+  margin: auto;
+  padding: 2rem 0; /* Reducido de 3rem */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem; /* Reducido */
+  animation: fadeInDown 0.8s;
+}
+
+.login-logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.login-logo {
+  width: 100px; /* Reducido de 120px */
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+}
+
+.login-title {
+  font-size: clamp(1.8rem, 6vw, 2.8rem); /* Reducido */
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  letter-spacing: -1px;
+}
+
+.login-subtitle {
+  color: var(--text-secondary);
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+}
+
+.role-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.role-card {
+  padding: 2.5rem 2rem; /* Reducido de 3.5rem */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  min-height: 480px; /* Altura controlada */
+}
+
+.role-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.role-icon-wrapper {
+  width: 70px; /* Reducido de 80px */
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.student-icon-wrapper {
+  background: rgba(198, 40, 40, 0.08);
+  color: var(--secondary);
+}
+
+.admin-icon-wrapper {
+  background: rgba(2, 136, 209, 0.08);
+  color: var(--primary);
+}
+
+.role-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.role-description {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  flex: 0 1 auto; /* Cambiado de flex: 1 */
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.login-form {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeIn 0.4s;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.login-form .form-control {
+  padding-left: 3rem;
+  height: 52px;
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 0.85rem;
+  position: absolute;
+  left: 0;
+  bottom: -22px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.student-card { animation: fadeInLeft 0.8s; }
+.admin-card { animation: fadeInRight 0.8s; }

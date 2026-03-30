@@ -15,14 +15,13 @@ const ProtectedRoute = ({ children }) => {
 
   if (authLoading) {
     return (
-      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)' }}>
-         <h3 style={{color: 'var(--text-primary)'}}>Comprobando sesión...</h3>
+      <div className="login-container" style={{ justifyContent: 'center' }}>
+         <h3 style={{ color: 'var(--text-primary)' }}>Comprobando sesión...</h3>
       </div>
     );
   }
 
   if (!user) {
-    // Si intentas acceder a admin y no estás logueado, ve al inicio
     return <Navigate to="/" replace />;
   }
   return children;
@@ -30,7 +29,8 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   useEffect(() => {
-    if (localStorage.getItem('theme') === 'dark') {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.remove('dark-mode');
@@ -41,16 +41,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        
-        {/* Ruta Pública (Estudiantes) */}
         <Route path="/portal" element={<PortalEstudiante />} />
         
-        {/* Rutas Administrativas Protegidas */}
         <Route path="/admin/*" element={
           <ProtectedRoute>
             <div className="app-container">
               <Sidebar />
-              <main className="main-content glass-panel" style={{ padding: '2rem' }}>
+              <main className="main-content glass-panel">
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/areas" element={<AreasCurriculares />} />

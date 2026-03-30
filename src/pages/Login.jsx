@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, Users, Lock, ChevronRight, ArrowRight, User } from 'lucide-react';
 import { auth } from '../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,107 +32,96 @@ const Login = () => {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', width: '100%',
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-      background: 'var(--bg-color)', position: 'relative'
-    }}>
-      {/* Fondo fijo decorativo para no crear barras de scroll horizontales */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
-         <div className="bg-shape shape1" style={{ width: '600px', height: '600px', position: 'absolute', top: '-20%', left: '-20%' }}></div>
-         <div className="bg-shape shape2" style={{ width: '500px', height: '500px', position: 'absolute', bottom: '-20%', right: '-20%' }}></div>
+    <div className="login-container">
+      {/* Fondo decorativo */}
+      <div className="login-bg-decorations">
+         <div className="bg-shape shape1"></div>
+         <div className="bg-shape shape2"></div>
       </div>
 
-      <div style={{ maxWidth: '1000px', width: '90%', margin: 'auto', padding: '3rem 0', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem', animation: 'fadeInDown 0.8s' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-             <img src="/escudo.png" alt="Escudo I.E 54083" style={{ width: '120px', height: '120px', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.2))' }} />
+      <div className="login-content">
+        <header className="login-header">
+          <div className="login-logo-container">
+             <img src="/escudo.png" alt="Escudo I.E 54083" className="login-logo" />
           </div>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-1px' }}>Biblioteca Virtual I.E 54083</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>Selecciona tu rol para ingresar al sistema</p>
-        </div>
+          <h1 className="login-title">Biblioteca Virtual I.E 54083</h1>
+          <p className="login-subtitle">Selecciona tu rol para ingresar al sistema</p>
+        </header>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', width: '100%' }}>
+        <div className="role-cards-grid">
           
           {/* Tarjeta de Estudiante */}
-          <div className="glass-panel" 
-               style={{ padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', transition: 'all 0.3s', animation: 'fadeInLeft 0.8s' }}
-               onClick={handleStudentAccess}
-               onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-10px)'}
-               onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
-            
-            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--secondary)' }}>
+          <div className="glass-panel role-card student-card" onClick={handleStudentAccess}>
+            <div className="role-icon-wrapper student-icon-wrapper">
                <Users size={40} />
             </div>
             
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Soy Estudiante</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', flex: 1 }}>
-               Acceso libre y directo al catálogo digital. Busca, explora y lee los libros virtuales alojados en nuestra biblioteca sin necesidad de contraseña.
+            <h2>Soy Estudiante</h2>
+            <p className="role-description">
+               Acceso libre al catálogo digital. Explora y lee los libros virtuales alojados en nuestra biblioteca sin necesidad de contraseña.
             </p>
             
-            <button className="btn btn-primary" style={{ border: 'none', background: 'var(--secondary)', width: '100%', display: 'flex', justifyContent: 'center', borderRadius: '30px', padding: '1rem' }}>
-               Entrar al Catálogo <ArrowRight size={20} style={{ marginLeft: '10px' }} />
+            <button className="btn btn-primary" style={{ background: 'var(--secondary)', width: '100%', borderRadius: '30px' }}>
+               Entrar al Catálogo <ArrowRight size={20} />
             </button>
           </div>
 
           {/* Tarjeta de Administrador */}
-          <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeInRight 0.8s' }}>
-            
-            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(79, 70, 229, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+          <div className="glass-panel role-card admin-card">
+            <div className="role-icon-wrapper admin-icon-wrapper">
                <Shield size={40} />
             </div>
             
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Soy Administrador</h2>
+            <h2>Soy Administrador</h2>
             
             {!showAdminLogin ? (
               <>
-                 <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', flex: 1 }}>
-                    Acceso exclusivo para el personal bibliotecario. Gestiona el inventario, estudiantes, préstamos y visualiza las estadísticas en tiempo real.
+                 <p className="role-description">
+                    Acceso exclusivo para el personal bibliotecario. Gestiona el inventario, estudiantes, préstamos y estadísticas.
                  </p>
-                 <button className="btn btn-primary" onClick={() => setShowAdminLogin(true)} style={{ width: '100%', display: 'flex', justifyContent: 'center', borderRadius: '30px', padding: '1rem' }}>
-                    Identificarse <ChevronRight size={20} style={{ marginLeft: '10px' }} />
+                 <button className="btn btn-primary" onClick={() => setShowAdminLogin(true)} style={{ width: '100%', borderRadius: '30px' }}>
+                    Identificarse <ChevronRight size={20} />
                  </button>
               </>
             ) : (
-              <form onSubmit={handleAdminLogin} style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', animation: 'fadeIn 0.4s' }}>
+              <form onSubmit={handleAdminLogin} className="login-form">
                  <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                    Por favor, ingresa tus credenciales de administrador.
+                    Ingresa tus credenciales de administrador.
                  </p>
                  
-                 <div style={{ position: 'relative', marginBottom: '1rem' }}>
-                    <User size={20} style={{ position: 'absolute', left: '15px', top: '15px', color: 'var(--text-secondary)' }} />
+                 <div className="input-group">
+                    <User size={20} className="input-icon" />
                     <input 
                       type="email" 
                       className="form-control" 
                       placeholder="Correo Electrónico"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      style={{ paddingLeft: '3rem', padding: '1rem 1rem 1rem 3rem', borderRadius: '8px', border: '1px solid var(--border)' }}
                       autoFocus
                       required
                     />
                  </div>
 
-                 <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
-                    <Lock size={20} style={{ position: 'absolute', left: '15px', top: '15px', color: 'var(--text-secondary)' }} />
+                 <div className="input-group">
+                    <Lock size={20} className="input-icon" />
                     <input 
                       type="password" 
                       className="form-control" 
                       placeholder="Contraseña"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      style={{ paddingLeft: '3rem', padding: '1rem 1rem 1rem 3rem', borderRadius: '8px', border: error ? '1px solid var(--danger)' : '1px solid var(--border)' }}
+                      style={{ borderColor: error ? 'var(--danger)' : 'var(--border)' }}
                       required
                     />
-                    {error && <span style={{ color: 'var(--danger)', fontSize: '0.85rem', position: 'absolute', left: 0, bottom: '-20px' }}>Credenciales incorrectas</span>}
+                    {error && <span className="error-message">Credenciales incorrectas</span>}
                  </div>
 
-                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button type="button" className="btn" onClick={() => setShowAdminLogin(false)} style={{ background: 'transparent', color: 'var(--text-secondary)', flex: 1 }}>
+                 <div className="form-actions">
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowAdminLogin(false)} style={{ flex: 1 }}>
                        Volver
                     </button>
                     <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={loading}>
-                       {loading ? 'Iniciando...' : 'Ingresar'}
+                       {loading ? '...' : 'Ingresar'}
                     </button>
                  </div>
               </form>

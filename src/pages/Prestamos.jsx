@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
-import { updatePrestamo, updateLibro } from '../services/dbActions';
-import { Plus, CheckCircle, Clock } from 'lucide-react';
+import { updatePrestamo, updateLibro, deletePrestamo } from '../services/dbActions';
+import { Plus, CheckCircle, Clock, Trash2 } from 'lucide-react';
 import AddPrestamoModal from '../components/AddPrestamoModal';
 
 const Prestamos = () => {
@@ -34,10 +34,16 @@ const Prestamos = () => {
      }
   };
 
+  const handleDelete = async (id) => {
+    if(window.confirm('¿Seguro que deseas eliminar permanentemente este registro de préstamo?')) {
+      await deletePrestamo(id);
+    }
+  };
+
   return (
-    <div style={{ animation: 'fadeIn 0.5s' }}>
+    <div className="fade-in">
       {showModal && <AddPrestamoModal onClose={() => setShowModal(false)} />}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Préstamos y Devoluciones</h1>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           <Plus size={18} /> Nuevo Préstamo
@@ -46,49 +52,59 @@ const Prestamos = () => {
 
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
         <table className="data-table">
-          <thead style={{ background: 'rgba(0,0,0,0.03)' }}>
+          <thead>
             <tr>
-              <th>ID P.</th>
+              <th>ID</th>
               <th>Estudiante</th>
               <th>Libro</th>
-              <th>Fecha Préstamo</th>
-              <th>Devolución Esperada</th>
+              <th className="hide-mobile">F. Préstamo</th>
+              <th>Vencimiento</th>
               <th>Estado</th>
-              <th>Acciones</th>
+              <th style={{ textAlign: 'right' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
               {(!prestamos || prestamos.length === 0) && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                    No hay préstamos registrados actualmente.
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+                     <Clock size={40} style={{ opacity: 0.1, marginBottom: '1rem' }} />
+                     <p>No hay registros de préstamos activos.</p>
                   </td>
                 </tr>
               )}
               {prestamos?.map(p => (
                  <tr key={p.id}>
-                    <td>#{p.id}</td>
-                    <td style={{ fontWeight: '500' }}>{p.estudianteNombre}</td>
-                    <td>{p.libroTitulo}</td>
-                    <td>{p.fechaPrestamo}</td>
-                    <td>{p.fechaDevolucionEsperada}</td>
+                    <td style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>#{p.id}</td>
+                    <td style={{ fontWeight: '600' }}>{p.estudianteNombre}</td>
+                    <td style={{ fontWeight: '500' }}>{p.libroTitulo}</td>
+                    <td className="hide-mobile">{p.fechaPrestamo}</td>
+                    <td>
+                       <div style={{ color: p.estado === 'activo' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                          {p.fechaDevolucionEsperada}
+                       </div>
+                    </td>
                     <td>
                        {p.estado === 'activo' ? (
-                          <span className="badge" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }}>
-                             <Clock size={12} style={{marginRight: 4}}/> Activo
+                          <span className="badge" style={{ background: 'rgba(251, 192, 45, 0.12)', color: 'var(--accent-gold)', border: '1px solid rgba(251, 192, 45, 0.2)' }}>
+                             Pendiente
                           </span>
                        ) : (
-                          <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--secondary)' }}>
-                             <CheckCircle size={12} style={{marginRight: 4}}/> Devuelto
+                          <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.1)', color: 'var(--primary)' }}>
+                             Devuelto
                           </span>
                        )}
                     </td>
                     <td>
-                       {p.estado === 'activo' && (
-                          <button className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', borderRadius: '4px' }} onClick={() => handleDevolucion(p.id, p.libroId)}>
-                             Recibir Devolución
+                       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                          {p.estado === 'activo' && (
+                             <button className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => handleDevolucion(p.id, p.libroId)}>
+                                Recibir
+                             </button>
+                          )}
+                          <button className="btn" style={{ padding: '0.4rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(p.id)} title="Eliminar Registro">
+                             <Trash2 size={18} />
                           </button>
-                       )}
+                       </div>
                     </td>
                  </tr>
               ))}

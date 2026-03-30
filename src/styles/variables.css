@@ -1,42 +1,48 @@
 :root {
-  /* Colors */
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --secondary: #10B981;
-  --background: #F3F4F6;
-  --surface: rgba(255, 255, 255, 0.7);
-  --surface-hover: rgba(255, 255, 255, 0.9);
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --border: rgba(255, 255, 255, 0.4);
-  --danger: #EF4444;
-  --warning: #F59E0B;
+  /* Colors - Institutional Palette */
+  --primary: #0288D1; /* Azul Institucional */
+  --primary-hover: #01579B;
+  --secondary: #C62828; /* Rojo Institucional */
+  --secondary-hover: #B71C1C;
+  --accent-brown: #795548; /* Marrón Institucional */
+  --accent-gold: #FBC02D; /* Dorado Institucional (Sol) */
+  
+  --background: #F4F7F9;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-hover: rgba(255, 255, 255, 0.95);
+  --text-primary: #1A202C;
+  --text-secondary: #2D3748; /* Más oscuro para contraste */
+  --border: rgba(0, 0, 0, 0.1); 
+  --danger: #E53E3E;
+  --warning: #DD6B20;
   
   /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.4);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-  --glass-blur: blur(12px);
-  --glass-border-radius: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px -4px rgba(0, 64, 128, 0.1);
+  --glass-blur: blur(10px); /* Menos blur para limpieza */
+  --glass-border-radius: 20px;
 
   /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: 'Outfit', 'Inter', system-ui, sans-serif;
   
-  /* Transitions */
-  --transition-fast: 0.15s ease-in-out;
-  --transition-normal: 0.3s ease-in-out;
+  /* Layout */
+  --sidebar-width: 260px;
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark-mode {
-  --primary: #818CF8;
-  --primary-hover: #6366F1;
-  --background: #111827;
-  --surface: rgba(31, 41, 55, 0.7);
-  --surface-hover: rgba(31, 41, 55, 0.9);
-  --text-primary: #F9FAFB;
-  --text-secondary: #D1D5DB;
+  --primary: #29B6F6; 
+  --primary-hover: #03A9F4;
+  --secondary: #EF5350;
+  --background: #0F172A; 
+  --surface: rgba(30, 41, 59, 0.85);
+  --surface-hover: rgba(30, 41, 59, 0.95);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
   --border: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(17, 24, 39, 0.7);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.05);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --glass-bg: rgba(15, 23, 42, 0.85);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 }

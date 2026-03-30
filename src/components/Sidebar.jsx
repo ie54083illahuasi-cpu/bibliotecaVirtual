@@ -13,7 +13,6 @@ const Sidebar = () => {
            <img src="/escudo.png" alt="Escudo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
         </div>
         <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Biblioteca I.E 54083</h2>
-        <span className="badge" style={{ background: 'var(--primary)', color: 'white', marginLeft: 'auto' }}>Pro</span>
       </div>
 
       <nav className="sidebar-nav">
