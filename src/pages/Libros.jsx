@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
 import { deleteLibro } from '../services/dbActions';
-import { Plus, Search, BookOpen, Smartphone, Trash2 } from 'lucide-react';
+import { Plus, Search, BookOpen, Smartphone, Trash2, Pencil } from 'lucide-react';
 import AddLibroModal from '../components/AddLibroModal';
 import ManageCategoriasModal from '../components/ManageCategoriasModal';
 import BookViewer from '../components/BookViewer';
@@ -123,7 +123,7 @@ const Libros = () => {
                        </button>
                     )}
                     <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingLibro(libro)} title="Editar">
-                       <Plus size={18} style={{ transform: 'rotate(45deg)' }} /> {/* Using Plus as a simplified Edit icon for now as I don't see Edit in imports */}
+                       <Pencil size={18} />
                     </button>
                     <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(libro.id)} title="Eliminar">
                        <Trash2 size={18}/>

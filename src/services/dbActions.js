@@ -8,8 +8,8 @@ const formatDataToUppercase = (data) => {
   
   const formatted = { ...data };
   Object.keys(formatted).forEach(key => {
-    // No convertir IDs, URLs de imagen ni direcciones de email (si las hay)
-    const isProtectedKey = ['id', 'urlPortada', 'urlVirtual', 'email', 'libroId', 'estudianteId'].includes(key);
+    // No convertir IDs, URLs de imagen, direcciones de email, tipos ni estados
+    const isProtectedKey = ['id', 'urlPortada', 'urlVirtual', 'email', 'libroId', 'estudianteId', 'tipo', 'estado'].includes(key);
     
     if (typeof formatted[key] === 'string' && !isProtectedKey) {
       formatted[key] = formatted[key].toUpperCase().trim();

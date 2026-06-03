@@ -20,6 +20,11 @@ const AddLibroModal = ({ onClose, editLibro }) => {
     setShowScanner(false);
   };
 
+  const handleAutoGenerateCode = () => {
+    const generatedCode = `LIB${Math.floor(10000000 + Math.random() * 90000000)}`;
+    setFormData({ ...formData, codigoBarras: generatedCode });
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -41,7 +46,7 @@ const AddLibroModal = ({ onClose, editLibro }) => {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             
             const base64String = canvas.toDataURL('image/jpeg', 0.7);
-            setFormData({ ...formData, urlPortada: base64String });
+            setFormData(prev => ({ ...prev, urlPortada: base64String }));
         };
         img.src = event.target.result;
     };
@@ -52,8 +57,14 @@ const AddLibroModal = ({ onClose, editLibro }) => {
     e.preventDefault();
     let finalData = { ...formData };
     
-    // Auto-generación de portada para virtuales
-    if (finalData.tipo === 'virtual' && finalData.urlVirtual && !finalData.urlPortada) {
+    // Auto-generación de código de barras/QR si está vacío
+    if (!finalData.codigoBarras || !finalData.codigoBarras.trim()) {
+      finalData.codigoBarras = `LIB${Math.floor(10000000 + Math.random() * 90000000)}`;
+    }
+
+    // Auto-generación de portada para virtuales (si está vacía o es igual al enlace de lectura por error/autocompletado)
+    const hasInvalidCover = !finalData.urlPortada || finalData.urlPortada.trim() === "" || finalData.urlPortada === finalData.urlVirtual;
+    if (finalData.tipo === 'virtual' && finalData.urlVirtual && hasInvalidCover) {
         if (finalData.urlVirtual.includes('fliphtml5.com')) {
            const cleanUrl = finalData.urlVirtual.trim().replace(/\/$/, ""); 
            finalData.urlPortada = `${cleanUrl}/files/shot.jpg`;
@@ -91,7 +102,10 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                   <div className="form-group full-width">
                      <label>Código de Barras / QR</label>
                      <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <input type="text" className="form-control" name="codigoBarras" value={formData.codigoBarras} onChange={handleChange} placeholder="Escanea o escribe el código" />
+                        <input type="text" className="form-control" name="codigoBarras" value={formData.codigoBarras} onChange={handleChange} placeholder="Escanea, escribe o autogenera el código" />
+                        <button type="button" className="btn btn-secondary" onClick={handleAutoGenerateCode} title="Generar código de barras automáticamente">
+                           Generar
+                        </button>
                         <button type="button" className="btn btn-secondary" onClick={() => setShowScanner(true)}>
                            <QrCode size={18} /> Escanear
                         </button>

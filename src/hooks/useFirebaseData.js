@@ -12,10 +12,19 @@ export const useFirebaseData = (path) => {
       const val = snapshot.val();
       if (val) {
         // Convert object to array of objects if needed, assuming keys are IDs
-        const dataList = Object.keys(val).map(key => ({
-          ...val[key],
-          id: key
-        }));
+        const dataList = Object.keys(val).map(key => {
+          const item = { ...val[key], id: key };
+          if (typeof item.tipo === 'string') item.tipo = item.tipo.toLowerCase();
+          if (typeof item.estado === 'string') item.estado = item.estado.toLowerCase();
+          
+          if (path === 'libros' && typeof item.areaCurricular === 'string') {
+            item.areaCurricular = item.areaCurricular.toUpperCase().trim();
+          }
+          if (path === 'categorias' && typeof item.nombre === 'string') {
+            item.nombre = item.nombre.toUpperCase().trim();
+          }
+          return item;
+        });
         setData(dataList);
       } else {
         setData([]);

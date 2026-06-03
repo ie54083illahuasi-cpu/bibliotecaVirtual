@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
 import { deleteEstudiante, addEstudiante } from '../services/dbActions';
-import { Plus, Search, FileSpreadsheet, Trash2, Users } from 'lucide-react';
+import { Plus, Search, FileSpreadsheet, Trash2, Users, Pencil } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import AddEstudianteModal from '../components/AddEstudianteModal';
 
@@ -148,9 +148,9 @@ const Estudiantes = () => {
                 </td>
                 <td>
                   <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'flex-end' }}>
-                    <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingEstudiante(est)} title="Editar">
-                       <Plus size={18} style={{ transform: 'rotate(45deg)' }} />
-                    </button>
+                     <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--text-secondary)' }} onClick={() => setEditingEstudiante(est)} title="Editar">
+                        <Pencil size={18} />
+                     </button>
                     <button className="btn" style={{ padding: '0.5rem', background: 'transparent', color: 'var(--danger)' }} onClick={() => handleDelete(est.id)} title="Eliminar">
                        <Trash2 size={18} />
                     </button>
