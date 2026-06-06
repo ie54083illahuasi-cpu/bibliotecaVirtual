@@ -8,6 +8,7 @@ import Prestamos from './pages/Prestamos';
 import PortalEstudiante from './pages/PortalEstudiante';
 import AreasCurriculares from './pages/AreasCurriculares';
 import Login from './pages/Login';
+import UsuariosPrivados from './pages/UsuariosPrivados';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
 const ProtectedRoute = ({ children }) => {
@@ -53,6 +54,7 @@ function App() {
                   <Route path="/areas" element={<AreasCurriculares />} />
                   <Route path="/libros" element={<Libros />} />
                   <Route path="/estudiantes" element={<Estudiantes />} />
+                  <Route path="/usuarios-privados" element={<UsuariosPrivados />} />
                   <Route path="/prestamos" element={<Prestamos />} />
                 </Routes>
               </main>

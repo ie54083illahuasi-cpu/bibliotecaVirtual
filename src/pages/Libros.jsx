@@ -3,7 +3,6 @@ import { useFirebaseData } from '../hooks/useFirebaseData';
 import { deleteLibro } from '../services/dbActions';
 import { Plus, Search, BookOpen, Smartphone, Trash2, Pencil } from 'lucide-react';
 import AddLibroModal from '../components/AddLibroModal';
-import ManageCategoriasModal from '../components/ManageCategoriasModal';
 import BookViewer from '../components/BookViewer';
 
 const Libros = () => {
@@ -11,7 +10,6 @@ const Libros = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingLibro, setEditingLibro] = useState(null);
   const [viewingVirtualBook, setViewingVirtualBook] = useState(null);
-  const [showCategorias, setShowCategorias] = useState(false);
   
   const todosLibros = useFirebaseData('libros') || [];
   const libros = todosLibros.filter(libro => 
@@ -31,14 +29,10 @@ const Libros = () => {
       {showModal && <AddLibroModal onClose={() => setShowModal(false)} />}
       {editingLibro && <AddLibroModal editLibro={editingLibro} onClose={() => setEditingLibro(null)} />}
       {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />}
-      {showCategorias && <ManageCategoriasModal onClose={() => setShowCategorias(false)} />}
       
       <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Gestión de Libros</h1>
         <div style={{ display: 'flex', gap: '1rem' }}>
-           <button className="btn btn-secondary" onClick={() => setShowCategorias(true)}>
-             Áreas Curriculares
-           </button>
            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
              <Plus size={18} /> Añadir Libro
            </button>
@@ -96,11 +90,30 @@ const Libros = () => {
                 <td>
                   <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{libro.titulo}</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{libro.autor}</div>
-                  {libro.areaCurricular && (
-                     <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.08)', color: 'var(--primary)', marginTop: '0.4rem', border: 'none' }}>
-                        {libro.areaCurricular}
-                     </span>
-                  )}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.4rem' }}>
+                    {libro.areaCurricular && (
+                       <span className="badge" style={{ background: 'rgba(2, 136, 209, 0.08)', color: 'var(--primary)', border: 'none' }}>
+                          {libro.areaCurricular}
+                       </span>
+                    )}
+                    {libro.destinatario && (
+                       <span className="badge" style={{ background: 'rgba(121, 85, 72, 0.08)', color: 'var(--accent-brown)', border: 'none' }}>
+                          {libro.destinatario}
+                       </span>
+                    )}
+                    {libro.grado && (
+                       <span className="badge" style={{ background: 'rgba(251, 192, 45, 0.15)', color: 'var(--accent-gold)', border: 'none' }}>
+                          {libro.grado}
+                       </span>
+                    )}
+                    <span className="badge" style={{ 
+                      background: libro.acceso === 'privado' ? 'rgba(229, 62, 98, 0.1)' : 'rgba(76, 175, 80, 0.1)', 
+                      color: libro.acceso === 'privado' ? 'var(--danger)' : '#2E7D32',
+                      border: 'none' 
+                    }}>
+                       {libro.acceso === 'privado' ? 'Privado' : 'Público'}
+                    </span>
+                  </div>
                 </td>
                 <td className="hide-mobile">{libro.edicion || '-'}</td>
                 <td>

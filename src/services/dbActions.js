@@ -9,7 +9,7 @@ const formatDataToUppercase = (data) => {
   const formatted = { ...data };
   Object.keys(formatted).forEach(key => {
     // No convertir IDs, URLs de imagen, direcciones de email, tipos ni estados
-    const isProtectedKey = ['id', 'urlPortada', 'urlVirtual', 'email', 'libroId', 'estudianteId', 'tipo', 'estado'].includes(key);
+    const isProtectedKey = ['id', 'urlPortada', 'urlVirtual', 'email', 'libroId', 'estudianteId', 'tipo', 'estado', 'destinatario', 'grado', 'usuario', 'contrasena', 'acceso'].includes(key);
     
     if (typeof formatted[key] === 'string' && !isProtectedKey) {
       formatted[key] = formatted[key].toUpperCase().trim();
@@ -102,4 +102,22 @@ export const updateCategoria = async (id, categoriaData) => {
 
 export const deleteCategoria = async (id) => {
   await remove(ref(database, `categorias/${id}`));
+};
+
+// Usuarios Privados
+export const addUsuarioPrivado = async (userData) => {
+  const data = formatDataToUppercase(userData);
+  const rawKey = data.usuario?.trim().toLowerCase();
+  const userId = rawKey ? sanitizeKey(rawKey) : push(ref(database, 'usuariosPrivados')).key;
+  await set(ref(database, `usuariosPrivados/${userId}`), { ...data, id: userId });
+  return userId;
+};
+
+export const updateUsuarioPrivado = async (id, userData) => {
+  const data = formatDataToUppercase(userData);
+  await update(ref(database, `usuariosPrivados/${id}`), data);
+};
+
+export const deleteUsuarioPrivado = async (id) => {
+  await remove(ref(database, `usuariosPrivados/${id}`));
 };

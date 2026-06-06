@@ -50,19 +50,19 @@ const Login = () => {
 
         <div className="role-cards-grid">
           
-          {/* Tarjeta de Estudiante */}
+          {/* Tarjeta de Estudiante (Biblioteca General) */}
           <div className="glass-panel role-card student-card" onClick={handleStudentAccess}>
             <div className="role-icon-wrapper student-icon-wrapper">
                <Users size={40} />
             </div>
             
-            <h2>Soy Estudiante</h2>
+            <h2>Biblioteca General</h2>
             <p className="role-description">
-               Acceso libre al catálogo digital. Explora y lee los libros virtuales alojados en nuestra biblioteca sin necesidad de contraseña.
+               Acceso libre al catálogo digital para estudiantes y docentes. Explora y lee los libros virtuales alojados en nuestra biblioteca sin necesidad de contraseña.
             </p>
             
             <button className="btn btn-primary" style={{ background: 'var(--secondary)', width: '100%', borderRadius: '30px' }}>
-               Entrar al Catálogo <ArrowRight size={20} />
+               Entrar <ArrowRight size={20} />
             </button>
           </div>
 

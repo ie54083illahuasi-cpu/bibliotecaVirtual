@@ -5,8 +5,18 @@ import { X, QrCode } from 'lucide-react';
 import Scanner from './Scanner';
 
 const AddLibroModal = ({ onClose, editLibro }) => {
-  const [formData, setFormData] = useState(editLibro || {
-    titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: '', urlPortada: ''
+  const [formData, setFormData] = useState(() => {
+    if (editLibro) {
+      return {
+        destinatario: '',
+        grado: 'Todos',
+        acceso: 'publico',
+        ...editLibro
+      };
+    }
+    return {
+      titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: '', urlPortada: '', destinatario: '', grado: 'Todos', acceso: 'publico'
+    };
   });
   const [showScanner, setShowScanner] = useState(false);
   
@@ -123,11 +133,39 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                      <label>Edición / Editorial</label>
                      <input type="text" className="form-control" name="edicion" value={formData.edicion} onChange={handleChange} />
                   </div>
-                  <div className="form-group full-width">
+                  <div className="form-group">
                      <label>Área Curricular</label>
                      <select className="form-control" name="areaCurricular" value={formData.areaCurricular || ''} onChange={handleChange}>
                         <option value="">-- Seleccionar Área --</option>
                         {categorias.map(cat => <option key={cat.id} value={cat.nombre}>{cat.nombre}</option>)}
+                     </select>
+                  </div>
+                  <div className="form-group">
+                     <label>Destinatario (Sección)</label>
+                     <select required className="form-control" name="destinatario" value={formData.destinatario || ''} onChange={handleChange}>
+                        <option value="">-- Seleccionar Destinatario --</option>
+                        <option value="Estudiantes">Estudiantes</option>
+                        <option value="Docentes">Docentes</option>
+                     </select>
+                  </div>
+                  <div className="form-group">
+                     <label>Acceso del Libro</label>
+                     <select className="form-control" name="acceso" value={formData.acceso || 'publico'} onChange={handleChange}>
+                        <option value="publico">Público (Libre)</option>
+                        <option value="privado">Privado (Con Contraseña)</option>
+                     </select>
+                  </div>
+                  <div className="form-group">
+                     <label>Grado del Libro</label>
+                     <select className="form-control" name="grado" value={formData.grado || ''} onChange={handleChange}>
+                        <option value="">-- Seleccionar Grado --</option>
+                        <option value="1° Grado">1° Grado</option>
+                        <option value="2° Grado">2° Grado</option>
+                        <option value="3° Grado">3° Grado</option>
+                        <option value="4° Grado">4° Grado</option>
+                        <option value="5° Grado">5° Grado</option>
+                        <option value="6° Grado">6° Grado</option>
+                        <option value="Todos">Todos los Grados</option>
                      </select>
                   </div>
                   <div className="form-group">

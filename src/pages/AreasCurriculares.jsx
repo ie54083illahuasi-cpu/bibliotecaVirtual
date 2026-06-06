@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useFirebaseData } from '../hooks/useFirebaseData';
-import { BookOpen, FolderOpen, ArrowLeft, Smartphone } from 'lucide-react';
+import { BookOpen, FolderOpen, ArrowLeft, Smartphone, Plus } from 'lucide-react';
 import BookViewer from '../components/BookViewer';
+import ManageCategoriasModal from '../components/ManageCategoriasModal';
 
 const AreasCurriculares = () => {
   const [selectedArea, setSelectedArea] = useState(null);
   const [viewingVirtualBook, setViewingVirtualBook] = useState(null);
+  const [showCategoriasModal, setShowCategoriasModal] = useState(false);
 
   const categorias = useFirebaseData('categorias') || [];
   const libros = useFirebaseData('libros') || [];
@@ -86,9 +88,15 @@ const AreasCurriculares = () => {
 // Vista principal de Áreas
 return (
   <div className="fade-in">
-    <div className="section-header" style={{ marginBottom: '2rem' }}>
-       <h1>Explorar Áreas Curriculares</h1>
-       <p style={{ color: 'var(--text-secondary)' }}>Navega por las colecciones organizadas por especialidad.</p>
+    {showCategoriasModal && <ManageCategoriasModal onClose={() => setShowCategoriasModal(false)} />}
+    <div className="section-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+       <div>
+          <h1>Explorar Áreas Curriculares</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>Navega por las colecciones organizadas por especialidad.</p>
+       </div>
+       <button className="btn btn-primary" onClick={() => setShowCategoriasModal(true)}>
+          <Plus size={18} /> Gestionar Áreas
+       </button>
     </div>
 
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '2rem' }}>
