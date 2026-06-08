@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import HTMLFlipBook from 'react-pageflip';
 import { Document, Page as PdfPage, pdfjs } from 'react-pdf';
@@ -11,8 +11,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 const BookPage = React.forwardRef((props, ref) => {
   return (
-    <div className="page" ref={ref} data-density="soft" style={{ padding: 0 }}>
+    <div className="page" ref={ref} data-density="soft" style={{ padding: 0, position: 'relative' }}>
       {props.children}
+      <div className="page-watermark">SOLO LECTURA - BIBLIOTECA VIRTUAL</div>
     </div>
   );
 });
@@ -22,6 +23,32 @@ const BookViewer = ({ url, title, onClose }) => {
   const [numPages, setNumPages] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Bloquear Ctrl+S, Ctrl+P, Ctrl+U, Ctrl+C (copiar), F12 y Ctrl+Shift+I / Ctrl+Shift+J (DevTools)
+      if (
+        (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C')) ||
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J'))
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    window.addEventListener('contextmenu', handleContextMenu, true);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      window.removeEventListener('contextmenu', handleContextMenu, true);
+    };
+  }, []);
 
   const isGoogleDrive = url && url.includes('drive.google.com');
   const isFlipHtml5 = url && url.includes('fliphtml5.com');
