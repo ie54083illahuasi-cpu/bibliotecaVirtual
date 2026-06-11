@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Loader2, AlertCircle, ExternalLink } from 'lucide-react';
 import HTMLFlipBook from 'react-pageflip';
 import { Document, Page as PdfPage, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -18,7 +18,7 @@ const BookPage = React.forwardRef((props, ref) => {
   );
 });
 
-const BookViewer = ({ url, title, onClose }) => {
+const BookViewer = ({ url, title, materialDidactico, onClose }) => {
   const bookRef = useRef();
   const [numPages, setNumPages] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -76,7 +76,31 @@ const BookViewer = ({ url, title, onClose }) => {
     <div className="viewer-backdrop">
       <div className="viewer-header">
         <h3 style={{ color: 'white', margin: 0 }}>{title || 'Lector Virtual'}</h3>
-        <button onClick={onClose} className="btn-close"><X size={24} /></button>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          {materialDidactico && (
+            <a 
+              href={materialDidactico} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-primary"
+              style={{ 
+                padding: '0.4rem 1rem', 
+                borderRadius: '20px', 
+                fontSize: '0.85rem', 
+                textDecoration: 'none', 
+                background: 'var(--primary)', 
+                borderColor: 'var(--primary)', 
+                color: 'white', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.5rem' 
+              }}
+            >
+              <ExternalLink size={16} /> Material Didáctico
+            </a>
+          )}
+          <button onClick={onClose} className="btn-close"><X size={24} /></button>
+        </div>
       </div>
       
       <div className="book-container" style={embedUrl ? { padding: 0, display: 'block', height: '100%', width: '100%', flex: 1 } : { flexDirection: 'column', padding: '2rem', overflow: 'hidden' }}>

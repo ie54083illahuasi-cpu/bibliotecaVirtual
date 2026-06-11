@@ -28,7 +28,7 @@ const Libros = () => {
     <div className="fade-in">
       {showModal && <AddLibroModal onClose={() => setShowModal(false)} />}
       {editingLibro && <AddLibroModal editLibro={editingLibro} onClose={() => setEditingLibro(null)} />}
-      {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />}
+      {viewingVirtualBook && <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} materialDidactico={viewingVirtualBook.materialDidactico} onClose={() => setViewingVirtualBook(null)} />}
       
       <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1>Gestión de Libros</h1>

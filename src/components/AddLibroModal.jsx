@@ -11,11 +11,12 @@ const AddLibroModal = ({ onClose, editLibro }) => {
         destinatario: '',
         grado: 'Todos',
         acceso: 'publico',
+        materialDidactico: '',
         ...editLibro
       };
     }
     return {
-      titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: '', urlPortada: '', destinatario: '', grado: 'Todos', acceso: 'publico'
+      titulo: '', autor: '', edicion: '', cantidad: 1, tipo: 'fisico', codigoBarras: '', urlVirtual: '', areaCurricular: '', urlPortada: '', destinatario: '', grado: 'Todos', acceso: 'publico', materialDidactico: ''
     };
   });
   const [showScanner, setShowScanner] = useState(false);
@@ -192,6 +193,11 @@ const AddLibroModal = ({ onClose, editLibro }) => {
                            <label>Enlace del Libro Virtual (Drive, FlipHTML5, etc.)</label>
                            <input type="url" className="form-control" name="urlVirtual" value={formData.urlVirtual} onChange={handleChange} placeholder="https://..." required />
                            <small style={{ color: 'var(--text-secondary)' }}>Proporciona el enlace para cargar el documento virtual.</small>
+                        </div>
+                        <div className="form-group full-width">
+                           <label>Enlace del Material Didáctico (Opcional)</label>
+                           <input type="url" className="form-control" name="materialDidactico" value={formData.materialDidactico || ''} onChange={handleChange} placeholder="https://..." />
+                           <small style={{ color: 'var(--text-secondary)' }}>Enlace a fichas de trabajo, cuestionarios u otros materiales de apoyo.</small>
                         </div>
                      </>
                   ) : (

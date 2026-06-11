@@ -21,7 +21,7 @@ const AreasCurriculares = () => {
   };
 
   if (viewingVirtualBook) {
-     return <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} onClose={() => setViewingVirtualBook(null)} />;
+     return <BookViewer url={viewingVirtualBook.urlVirtual} title={viewingVirtualBook.titulo} materialDidactico={viewingVirtualBook.materialDidactico} onClose={() => setViewingVirtualBook(null)} />;
   }
 
   // Vista de libros dentro de un área específica

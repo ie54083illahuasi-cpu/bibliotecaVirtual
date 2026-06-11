@@ -159,6 +159,7 @@ const PortalEstudiante = () => {
         <BookViewer 
           url={viewingVirtualBook.urlVirtual} 
           title={viewingVirtualBook.titulo} 
+          materialDidactico={viewingVirtualBook.materialDidactico}
           onClose={() => setViewingVirtualBook(null)} 
         />
       )}
