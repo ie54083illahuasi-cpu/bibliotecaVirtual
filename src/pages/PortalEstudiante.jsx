@@ -206,20 +206,20 @@ const PortalEstudiante = () => {
             }}
           >
             <Lock size={20} color={isPrivado ? 'white' : 'var(--text-secondary)'} />
-            Zona Privada
+            Material Especializado
           </button>
         </div>
 
         {/* Renderizado de Contenidos por Pestaña */}
         {isPrivado && !isPrivateAuth ? (
-          /* Formulario de Inicio de Sesión para Zona Privada */
+          /* Formulario de Inicio de Sesión para Material Especializado */
           <div className="glass-panel private-login-card" style={{ maxWidth: '400px', margin: '2rem auto', padding: '2rem', textAlign: 'center' }}>
             <div style={{ display: 'inline-flex', padding: '1rem', background: 'rgba(229, 62, 98, 0.1)', color: 'var(--danger)', borderRadius: '50%', marginBottom: '1.5rem' }}>
                <Lock size={32} />
             </div>
             <h2 style={{ marginBottom: '0.5rem' }}>Acceso Restringido</h2>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-               Ingresa las credenciales proporcionadas por el administrador para acceder al material privado y con costo.
+               Ingresa las credenciales proporcionadas por el administrador para acceder al material especializado.
             </p>
             
             {loginError && <div style={{ color: 'var(--danger)', marginBottom: '1rem', fontSize: '0.9rem', fontWeight: 600 }}>{loginError}</div>}
@@ -252,7 +252,7 @@ const PortalEstudiante = () => {
                </div>
                
                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem', borderRadius: '30px', background: 'var(--danger)', borderColor: 'var(--danger)' }}>
-                  Ingresar a la Zona Privada
+                  Ingresar a Material Especializado
                </button>
             </form>
           </div>
@@ -263,10 +263,10 @@ const PortalEstudiante = () => {
               <div className="glass-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '800px', margin: '0 auto 1.5rem auto', padding: '1rem 2rem', borderLeft: '4px solid var(--danger)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                    <Lock size={20} color="var(--danger)" />
-                   <span style={{ fontWeight: 600 }}>Zona Privada activa: Bienvenido, {privateUserName}!</span>
+                   <span style={{ fontWeight: 600 }}>Material Especializado activo: Bienvenido, {privateUserName}!</span>
                 </div>
                 <button className="btn btn-secondary" style={{ padding: '0.4rem 1rem', borderRadius: '20px', fontSize: '0.85rem' }} onClick={handlePrivateLogout}>
-                   Cerrar Sesión Privada
+                   Cerrar Sesión Especializada
                 </button>
               </div>
             )}
@@ -282,7 +282,7 @@ const PortalEstudiante = () => {
                          ? "Buscar libros para estudiantes..." 
                          : isDocentes 
                            ? "Buscar libros para docentes..." 
-                           : "Buscar en la colección privada..."
+                           : "Buscar en la colección especializada..."
                     }
                     value={currentSearch}
                     onChange={(e) => setCurrentSearch(e.target.value)}
@@ -344,7 +344,7 @@ const PortalEstudiante = () => {
                             )}
                             {libro.acceso === 'privado' && (
                                <span className="book-area-badge" style={{ marginTop: 0, background: 'rgba(229, 62, 98, 0.15)', color: 'var(--danger)' }}>
-                                  Privado
+                                  Especializado
                                </span>
                             )}
                           </div>
