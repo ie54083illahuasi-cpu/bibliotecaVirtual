@@ -9,6 +9,7 @@ import PortalEstudiante from './pages/PortalEstudiante';
 import AreasCurriculares from './pages/AreasCurriculares';
 import Login from './pages/Login';
 import UsuariosPrivados from './pages/UsuariosPrivados';
+import UsuariosSistema from './pages/UsuariosSistema';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
 const ProtectedRoute = ({ children }) => {
@@ -24,6 +25,14 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/" replace />;
+  }
+  return children;
+};
+
+const AdminRoute = ({ children }) => {
+  const { user } = useFirebaseAuth();
+  if (user && !user.isSuperAdmin) {
+    return <Navigate to="/admin" replace />;
   }
   return children;
 };
@@ -54,7 +63,16 @@ function App() {
                   <Route path="/areas" element={<AreasCurriculares />} />
                   <Route path="/libros" element={<Libros />} />
                   <Route path="/estudiantes" element={<Estudiantes />} />
-                  <Route path="/usuarios-privados" element={<UsuariosPrivados />} />
+                  <Route path="/usuarios-privados" element={
+                    <AdminRoute>
+                      <UsuariosPrivados />
+                    </AdminRoute>
+                  } />
+                  <Route path="/usuarios-sistema" element={
+                    <AdminRoute>
+                      <UsuariosSistema />
+                    </AdminRoute>
+                  } />
                   <Route path="/prestamos" element={<Prestamos />} />
                 </Routes>
               </main>

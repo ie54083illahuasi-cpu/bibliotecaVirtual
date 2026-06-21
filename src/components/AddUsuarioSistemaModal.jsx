@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { addUsuarioPrivado, updateUsuarioPrivado } from '../services/dbActions';
+import { addUsuarioSistema, updateUsuarioSistema } from '../services/dbActions';
 import { X, Lock, User, UserCheck } from 'lucide-react';
 
-const AddUsuarioPrivadoModal = ({ onClose, editUsuario }) => {
+const AddUsuarioSistemaModal = ({ onClose, editUsuario }) => {
   const [formData, setFormData] = useState(editUsuario || {
     nombre: '', usuario: '', contrasena: ''
   });
@@ -21,13 +21,13 @@ const AddUsuarioPrivadoModal = ({ onClose, editUsuario }) => {
 
     try {
       if (editUsuario) {
-        await updateUsuarioPrivado(editUsuario.id, formData);
+        await updateUsuarioSistema(editUsuario.id, formData);
       } else {
-        await addUsuarioPrivado(formData);
+        await addUsuarioSistema(formData);
       }
       onClose();
     } catch {
-      setError('Ocurrió un error al guardar el usuario.');
+      setError('Ocurrió un error al guardar el colaborador.');
     }
   };
 
@@ -35,7 +35,7 @@ const AddUsuarioPrivadoModal = ({ onClose, editUsuario }) => {
     <div className="modal-backdrop" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, backdropFilter: 'blur(4px)', padding: '1rem' }}>
       <div className="glass-panel" style={{ width: '100%', maxWidth: '450px', padding: '2rem', animation: 'fadeIn 0.3s', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-          <h2>{editUsuario ? 'Editar Usuario Privado' : 'Añadir Usuario Privado'}</h2>
+          <h2>{editUsuario ? 'Editar Colaborador' : 'Añadir Colaborador'}</h2>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}><X size={24}/></button>
         </div>
 
@@ -100,7 +100,7 @@ const AddUsuarioPrivadoModal = ({ onClose, editUsuario }) => {
             
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
                 <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-                <button type="submit" className="btn btn-primary">{editUsuario ? 'Guardar Cambios' : 'Registrar Usuario'}</button>
+                <button type="submit" className="btn btn-primary">{editUsuario ? 'Guardar Cambios' : 'Registrar Colaborador'}</button>
             </div>
         </form>
       </div>
@@ -108,4 +108,4 @@ const AddUsuarioPrivadoModal = ({ onClose, editUsuario }) => {
   );
 };
 
-export default AddUsuarioPrivadoModal;
+export default AddUsuarioSistemaModal;

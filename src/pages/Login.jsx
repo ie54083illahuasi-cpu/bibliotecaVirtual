@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Users, Lock, ChevronRight, ArrowRight, User } from 'lucide-react';
-import { auth } from '../config/firebase';
+import { auth, database } from '../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { ref, get, child } from 'firebase/database';
 import './Login.css';
 
 const Login = () => {
@@ -16,10 +17,39 @@ const Login = () => {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
     try {
+      // 1. Intentar iniciar sesión como colaborador de la base de datos
+      const dbRef = ref(database);
+      const snapshot = await get(child(dbRef, 'usuariosSistema'));
+      let colaboradorLoggeado = false;
+      
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+        const foundUser = Object.keys(users).map(key => ({ ...users[key], id: key })).find(u => 
+          (u.usuario || '').toLowerCase() === email.trim().toLowerCase() && 
+          u.contrasena === password
+        );
+        if (foundUser) {
+          sessionStorage.setItem('colaborador_session', JSON.stringify(foundUser));
+          colaboradorLoggeado = true;
+        }
+      }
+
+      if (colaboradorLoggeado) {
+        sessionStorage.removeItem('private_auth');
+        navigate('/admin');
+        window.location.reload();
+        return;
+      }
+
+      // 2. Si no coincide, intentar iniciar sesión como administrador principal en Firebase Auth
       await signInWithEmailAndPassword(auth, email, password);
+      sessionStorage.removeItem('colaborador_session');
       navigate('/admin');
+      window.location.reload();
     } catch (err) {
+      console.error(err);
       setError(true);
       setTimeout(() => setError(false), 3000);
     } finally {
@@ -92,9 +122,9 @@ const Login = () => {
                  <div className="input-group">
                     <User size={20} className="input-icon" />
                     <input 
-                      type="email" 
+                      type="text" 
                       className="form-control" 
-                      placeholder="Correo Electrónico"
+                      placeholder="Usuario o Correo Electrónico"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoFocus

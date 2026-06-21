@@ -1,7 +1,7 @@
 import { database } from '../config/firebase';
 import { ref, set, get, update, remove, push, child } from 'firebase/database';
 
-const sanitizeKey = (key) => key.replace(/[.#$\[\]]/g, '');
+const sanitizeKey = (key) => key.replace(/[.#$[\]]/g, '');
 
 const formatDataToUppercase = (data) => {
   if (!data || typeof data !== 'object') return data;
@@ -120,4 +120,22 @@ export const updateUsuarioPrivado = async (id, userData) => {
 
 export const deleteUsuarioPrivado = async (id) => {
   await remove(ref(database, `usuariosPrivados/${id}`));
+};
+
+// Usuarios del Sistema (Colaboradores/Bibliotecarios)
+export const addUsuarioSistema = async (userData) => {
+  const data = formatDataToUppercase(userData);
+  const rawKey = data.usuario?.trim().toLowerCase();
+  const userId = rawKey ? sanitizeKey(rawKey) : push(ref(database, 'usuariosSistema')).key;
+  await set(ref(database, `usuariosSistema/${userId}`), { ...data, id: userId });
+  return userId;
+};
+
+export const updateUsuarioSistema = async (id, userData) => {
+  const data = formatDataToUppercase(userData);
+  await update(ref(database, `usuariosSistema/${id}`), data);
+};
+
+export const deleteUsuarioSistema = async (id) => {
+  await remove(ref(database, `usuariosSistema/${id}`));
 };
